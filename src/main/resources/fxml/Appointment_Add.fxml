@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="597.0" prefWidth="400.0" style="-fx-background-color: white;" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poshpaws.appscheduler.viewcontroller.Appointment_AddController">
+   <children>
+      <HBox alignment="CENTER" layoutY="1.0" prefHeight="50.0" spacing="15.0" style="-fx-background-color: -fx-lightblue;" stylesheets="@../styles/styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/scheduling.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="topLabel" text="Add Appointment">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="btnClose" fitHeight="22.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/close.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="19.0" layoutY="540.0" prefHeight="50.0" prefWidth="462.0" spacing="30.0" style="-fx-background-color: lightgray;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <JFXButton fx:id="btnApptSave" onAction="#handleApptSave" prefHeight="30.0" prefWidth="101.0" styleClass="normalButton" text="Save" />
+            <JFXButton fx:id="btnApptCancel" onAction="#handleApptCancel" prefHeight="30.0" prefWidth="109.0" styleClass="normalButton" text="Cancel" />
+         </children>
+      </HBox>
+      <VBox alignment="TOP_CENTER" layoutY="50.0" prefHeight="279.0" prefWidth="401.0" spacing="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <Label fx:id="apptIdLabel" text="Label" />
+            <JFXDatePicker fx:id="datePicker" prefHeight="25.0" prefWidth="250.0" promptText="Date" />
+            <AnchorPane>
+               <children>
+                  <HBox alignment="CENTER" spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <JFXComboBox fx:id="comboStart" prefHeight="25.0" prefWidth="110.0" promptText="Start Time" />
+                        <JFXComboBox fx:id="comboEnd" prefHeight="25.0" prefWidth="110.0" promptText="End Time" />
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+            <JFXComboBox fx:id="comboType" prefHeight="25.0" prefWidth="250.0" promptText="Appointment Type" />
+            <JFXComboBox fx:id="comboBarber" prefHeight="25.0" prefWidth="250.0" promptText="Barber" />
+            <JFXTextField fx:id="txtDesc" maxWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" promptText="Notes (Optional)" />
+            <HBox alignment="CENTER" prefHeight="25.0" prefWidth="250.0" spacing="20.0">
+               <children>
+                  <JFXRadioButton fx:id="choiceExistingCustomer" selected="true" text="Existing Customer">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="NewOrExistingCustomer" />
+                     </toggleGroup>
+                  </JFXRadioButton>
+                  <JFXRadioButton fx:id="choiceNewCustomer" text="New Customer" toggleGroup="$NewOrExistingCustomer" />
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="50.0" right="50.0" top="10.0" />
+         </padding>
+      </VBox>
+      <StackPane layoutY="345.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="345.0">
+         <children>
+            <VBox fx:id="vBoxExist" alignment="TOP_CENTER" spacing="5.0">
+               <children>
+                  <JFXComboBox fx:id="comboExistCustomer" editable="true" prefHeight="20.0" prefWidth="250.0" promptText="Select Existing Customer">
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                  </JFXComboBox>
+                  <JFXComboBox fx:id="comboPet" prefHeight="20.0" prefWidth="250.0" promptText="Pet">
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                  </JFXComboBox>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="90.0" right="90.0" top="10.0" />
+               </padding>
+            </VBox>
+            <VBox fx:id="vBoxNew" alignment="TOP_CENTER" spacing="5.0">
+               <children>
+                  <JFXTextField fx:id="txtNewCustomer" promptText="New Customer Name" />
+                  <JFXTextField fx:id="txtNewNumber" promptText="Phone Number" />
+                  <JFXTextField fx:id="txtNewPet" promptText="Pet Name" />
+                  <JFXTextField fx:id="txtPetDesc" promptText="Pet Description" />
+                  <JFXComboBox fx:id="comboPetType" prefHeight="25.0" prefWidth="277.0" promptText="Select Pet Type" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="90.0" right="90.0" top="10.0" />
+               </padding>
+            </VBox>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,4 @@
+Feb 03, 2020 7:49:45 PM com.poshpaws.appscheduler.viewcontroller.LoginScreenController handleActionLogin
+INFO: test logged in on Feb 3, 2020 7:49:45 PM
+Feb 03, 2020 7:56:10 PM com.poshpaws.appscheduler.viewcontroller.LoginScreenController handleActionLogin
+INFO: test logged in on Feb 3, 2020 7:56:10 PM

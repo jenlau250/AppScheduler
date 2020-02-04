@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="460.0" prefWidth="437.0" style="-fx-background-color: white;" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poshpaws.appscheduler.viewcontroller.BarberAddController">
+   <children>
+      <HBox alignment="CENTER" layoutY="1.0" prefHeight="50.0" spacing="15.0" style="-fx-background-color: -fx-lightblue;" stylesheets="@../styles/styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/scheduling.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="topLabel" text="Add Barber">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="btnClose" fitHeight="22.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/close.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="19.0" layoutY="540.0" prefHeight="50.0" prefWidth="462.0" spacing="30.0" style="-fx-background-color: lightgray;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <JFXButton fx:id="btnSave" onAction="#handleSave" prefHeight="30.0" prefWidth="101.0" styleClass="normalButton" text="Save" />
+            <JFXButton fx:id="btnCancel" onAction="#handleCancel" prefHeight="30.0" prefWidth="109.0" styleClass="normalButton" text="Cancel" />
+         </children>
+      </HBox>
+      <VBox alignment="TOP_CENTER" layoutY="50.0" spacing="15.0" AnchorPane.bottomAnchor="89.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <Label fx:id="labelBarberId" text="Label" />
+            <JFXTextField fx:id="txtName" promptText="Name" />
+            <JFXTextField fx:id="txtPhone" promptText="Phone" />
+            <JFXTextField fx:id="txtEmail" promptText="Email" />
+            <JFXDatePicker fx:id="datePicker" prefHeight="25.0" prefWidth="405.0" promptText="Date of Hire" />
+            <AnchorPane />
+            <JFXCheckBox fx:id="checkboxActive" text="Active?" />
+            <JFXTextField fx:id="txtNotes" alignment="TOP_LEFT" prefHeight="54.0" prefWidth="297.0" promptText="Notes (Optional)" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="50.0" right="50.0" top="10.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

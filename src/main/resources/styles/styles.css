@@ -1,0 +1,68 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 9, 2020, 7:57:41 PM
+    Author     : Jen
+*/
+
+* {
+    -fx-primary : #282c37;
+    -fx-secondary: #9baec8;
+    -fx-lightblue: #d9e1e8;
+    -fx-darkblue: #2b90d9;
+
+}
+
+p.field-wrapper input {
+    float: right;
+}
+p.required-field label::before { 
+    content: "*";
+    color: red;
+}
+
+.title {
+  -fx-font: 28px Roboto;
+}
+
+.subtitle {
+  -fx-font: 20px Roboto;
+}
+
+.myButton:hover {
+    -fx-text-fill: -fx-primary;
+    -fx-border-color: -fx-lightblue;
+    -fx-border-width: 0px 0px 4px 0px;
+    -fx-line-spacing: 1px;
+    -fx-font-size: 15px;
+}
+
+.btn2 {
+    -fx-background-color: -fx-lightblue;
+    -fx-text-fill: -fx-primary;
+    -fx-border-color: -fx-lightblue;
+    -fx-border-width: 0px 0px 4px 0px;
+    -fx-line-spacing: 1px;
+    -fx-font-size: 15px;
+}
+
+.dialog-button {
+    -fx-background-color: -fx-blue;
+    -fx-text-fill: white;
+    -fx-border-color: -fx-lightblue;
+}
+
+
+
+.normalButton {
+    -fx-text-fill: white;
+    -fx-background-color: -fx-darkblue;
+    -fx-font-size: 14px;
+}
+
+.normalButton:hover {
+    -fx-font-size: 15px;
+}

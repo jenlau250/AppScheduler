@@ -1,0 +1,427 @@
+@startuml
+
+title __VIEWCONTROLLER's Class Diagram__\n
+
+  namespace com.poshpaws.appscheduler {
+    namespace viewcontroller {
+      class com.poshpaws.appscheduler.viewcontroller.AppointmentListController {
+          ~ dateFormatter : DateTimeFormatter
+          ~ timeFormatter : DateTimeFormatter
+          {static} - DATEFORMATTOLOCAL : DateTimeFormatter
+          - appointmentList : ObservableList<Appointment>
+          - btnBack : JFXButton
+          - btnNewAdd : JFXButton
+          - btnNext : JFXButton
+          - btnViewCustomer : JFXButton
+          - colBarber : TableColumn<Appointment, String>
+          - colCusName : TableColumn<Appointment, String>
+          - colDate : TableColumn<Appointment, LocalDate>
+          - colDesc : TableColumn<Appointment, String>
+          - colEnd : TableColumn<Appointment, LocalDateTime>
+          - colPet : TableColumn<Appointment, String>
+          - colStart : TableColumn<Appointment, LocalDateTime>
+          - colType : TableColumn<Appointment, String>
+          - comboWeekMonth : JFXComboBox
+          - currDate : LocalDate
+          - dateformat : DateTimeFormatter
+          - labelEndBound : Label
+          - labelStartBound : Label
+          - labelformat : DateTimeFormatter
+          {static} - logger : Logger
+          - tableView : TableView<Appointment>
+          - timeformat : DateTimeFormatter
+          + AppointmentListController()
+          + initialize()
+          + setMainController()
+          ~ handleApptAddNew()
+          ~ handleApptDelete()
+          ~ handleApptEdit()
+          ~ handleCustomerView()
+          - deleteAppointment()
+          - nextDay()
+          - nextMonth()
+          - nextWeek()
+          - previousDay()
+          - previousMonth()
+          - previousWeek()
+      }
+    }
+  }
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace viewcontroller {
+      class com.poshpaws.appscheduler.viewcontroller.AppointmentLoader {
+          {static} + main()
+          + start()
+      }
+    }
+  }
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace viewcontroller {
+      class com.poshpaws.appscheduler.viewcontroller.Appointment_AddController {
+          - NewOrExistingCustomer : ToggleGroup
+          - apptIdLabel : Label
+          - btnApptCancel : JFXButton
+          - btnApptSave : JFXButton
+          - btnClose : ImageView
+          - choiceExistingCustomer : JFXRadioButton
+          - choiceNewCustomer : JFXRadioButton
+          - comboBarber : JFXComboBox<Barber>
+          - comboEnd : JFXComboBox<String>
+          - comboExistCustomer : JFXComboBox<Customer>
+          - comboPet : JFXComboBox<Pet>
+          - comboPetType : JFXComboBox<String>
+          - comboStart : JFXComboBox<String>
+          - comboType : JFXComboBox<String>
+          - customers : ObservableList<Customer>
+          - data : ObservableList<Appointment>
+          - datePicker : JFXDatePicker
+          - dateformat : DateTimeFormatter
+          - editClicked : boolean
+          - labelformat : DateTimeFormatter
+          {static} - logger : Logger
+          - selectedPets : ObservableList<Pet>
+          - timeformat : DateTimeFormatter
+          - topLabel : Label
+          - txtDesc : JFXTextField
+          - txtNewCustomer : JFXTextField
+          - txtNewNumber : JFXTextField
+          - txtNewPet : JFXTextField
+          - txtPetDesc : JFXTextField
+          - vBoxExist : VBox
+          - vBoxNew : VBox
+          + initialize()
+          + setMainController()
+          + setSelectedAppointment()
+          + validateApptOverlap()
+          ~ handleApptCancel()
+          ~ handleApptSave()
+          - clearFields()
+          - convertComboBoxtoString()
+          - initNewFields()
+          - populatePetCombo()
+          - saveNewAppointment()
+          - showAppointmentDetails()
+          - updateAppointment()
+          - validateAppt()
+          - validateNewCustomerFields()
+      }
+    }
+  }
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace viewcontroller {
+      class com.poshpaws.appscheduler.viewcontroller.BarberAddController {
+          ~ selectedId : String
+          ~ statusOptions : List<String>
+          - btnCancel : JFXButton
+          - btnClose : ImageView
+          - btnSave : JFXButton
+          - checkboxActive : JFXCheckBox
+          - datePicker : JFXDatePicker
+          - editMode : boolean
+          - labelBarberId : Label
+          {static} - logger : Logger
+          - topLabel : Label
+          - txtEmail : TextField
+          - txtName : TextField
+          - txtNotes : TextField
+          - txtPhone : TextField
+          + BarberAddController()
+          + setMainController()
+          + setSelected()
+          ~ handleCancel()
+          ~ handleSave()
+          - clearFields()
+          - saveNewBarber()
+          - showBarberDetails()
+          - updateBarber()
+          - validateBarber()
+      }
+    }
+  }
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace viewcontroller {
+      class com.poshpaws.appscheduler.viewcontroller.BarberScreenController {
+          ~ statusOptions : List<String>
+          - BarberTable : TableView<Barber>
+          - barberLabel : Label
+          - btnAdd : JFXButton
+          - btnDelete : JFXButton
+          - btnUpdate : JFXButton
+          - colEmail : TableColumn<Barber, String>
+          - colHireDate : TableColumn<Barber, String>
+          - colID : TableColumn<Barber, String>
+          - colName : TableColumn<Barber, String>
+          - colNotes : TableColumn<Barber, String>
+          - colPhone : TableColumn<Barber, String>
+          - colStatus : TableColumn<Barber, Boolean>
+          - editMode : boolean
+          - filterBarber : JFXTextField
+          - filterStatus : JFXComboBox
+          {static} - logger : Logger
+          - selectedStatus : ObservableList<Barber>
+          + BarberScreenController()
+          + setMainController()
+          ~ handleAdd()
+          ~ handleDelete()
+          ~ handleUpdate()
+          - deleteBarber()
+          - initCol()
+          - initializeStatusCombo()
+          - loadTableView()
+      }
+    }
+  }
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace viewcontroller {
+      class com.poshpaws.appscheduler.viewcontroller.CustomerPaneController {
+          - apptIdLabel : Label
+          - btnClose : ImageView
+          - imageRetrievalService : Service<Image>
+          {static} - logger : Logger
+          - petPhoto : ImageView
+          - topLabel : Label
+          - txtCustomerEmail : JFXTextField
+          - txtCustomerName : JFXTextField
+          - txtCustomerPhone : JFXTextField
+          - txtNewPet : JFXTextField
+          - txtNotes : JFXTextField
+          - txtPetDesc : JFXTextField
+          - txtPetType : JFXTextField
+          + getImageById()
+          + initialize()
+          + setMainController()
+          + setSelectedAppointment()
+          ~ handleApptCancel()
+          - showCustomerDetails()
+      }
+    }
+  }
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace viewcontroller {
+      class com.poshpaws.appscheduler.viewcontroller.CustomerScreenController {
+          ~ imgPath : String
+          - CustomerTable : TableView<Customer>
+          - btnCustomerAdd : JFXButton
+          - btnCustomerCancelSave : JFXButton
+          - btnCustomerDelete : JFXButton
+          - btnCustomerSave : JFXButton
+          - btnCustomerUpdate : JFXButton
+          - btnPetDelete : JFXButton
+          - btnPetSave : JFXButton
+          - btnUpload : JFXButton
+          - cbPetSelection : JFXComboBox<Pet>
+          - checkboxActive : JFXCheckBox
+          - colCustomerEmail : TableColumn<Customer, String>
+          - colCustomerID : TableColumn<Customer, String>
+          - colCustomerName : TableColumn<Customer, String>
+          - colCustomerPhone : TableColumn<Customer, String>
+          - colCustomerStatus : TableColumn<Customer, Boolean>
+          - comboPetType : JFXComboBox<String>
+          - customerLabel : Label
+          - customerList : ObservableList<Customer>
+          - customerPets : ObservableList<Pet>
+          - editMode : boolean
+          - filterCustomer : JFXTextField
+          - filterStatus : JFXComboBox
+          - labelCusID : Label
+          {static} - logger : Logger
+          - petImageFile : String
+          - petLabel : Label
+          - petList : ObservableList<Pet>
+          {static} - petNames : ObservableList<String>
+          - petPhoto : ImageView
+          - rootAnchorPane : AnchorPane
+          - rootPane : StackPane
+          - selectPetLabel : Label
+          - selectedPets : ObservableList<Pet>
+          - selectedStatus : ObservableList<Customer>
+          - txtCustomerEmail : JFXTextField
+          - txtCustomerName : JFXTextField
+          - txtCustomerNotes : JFXTextField
+          - txtCustomerPhone : JFXTextField
+          - txtPetDescription : TextField
+          - txtPetName : JFXTextField
+          + CustomerScreenController()
+          + setMainController()
+          ~ handleAddCustomer()
+          ~ handleCancelCustomer()
+          ~ handleDeleteCustomer()
+          ~ handleDeletePet()
+          ~ handleSaveCustomer()
+          ~ handleSavePet()
+          ~ handleUpdateCustomer()
+          ~ handleUploadPhoto()
+          - addNewPet()
+          - clearFields()
+          - convertComboBoxString()
+          - customerSelected()
+          - deleteCustomer()
+          - deletePet()
+          - disableEdits()
+          - enableEdits()
+          - hasPetPhoto()
+          - hideButtons()
+          - initCol()
+          - initializeStatusCombo()
+          - loadTableView()
+          - petSelected()
+          - saveNewCustomer()
+          - setDefault()
+          - showButtons()
+          - updateCustomer()
+          - updatePet()
+          - validateCustomer()
+          - validatePet()
+      }
+    }
+  }
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace viewcontroller {
+      class com.poshpaws.appscheduler.viewcontroller.LoginScreenController {
+          ~ Users : ObservableList<User>
+          ~ rb : ResourceBundle
+          - buttonCancel : JFXButton
+          - buttonLogin : JFXButton
+          {static} - logger : Logger
+          - textUserId : JFXTextField
+          - textUserPw : JFXPasswordField
+          + LoginScreenController()
+          + setMainController()
+          ~ handleActionLogin()
+          ~ validateLogin()
+      }
+    }
+  }
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace viewcontroller {
+      class com.poshpaws.appscheduler.viewcontroller.MainScreenController {
+          ~ reminderList : ObservableList<Appointment>
+          - btnAppt : JFXButton
+          - btnCustomers : JFXButton
+          - btnExit : JFXButton
+          - btnReports : JFXButton
+          - btnStaff : JFXButton
+          {static} - logger : Logger
+          - newzid : ZoneId
+          - timeDTF : DateTimeFormatter
+          - txtAreaReminders : TextArea
+          + MainScreenController()
+          + setMenu()
+          - reminder()
+      }
+    }
+  }
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace viewcontroller {
+      class com.poshpaws.appscheduler.viewcontroller.ReportScreenController {
+          ~ filteredData : FilteredList<Appointment>
+          ~ timeFormatter : DateTimeFormatter
+          - apptList : ObservableList<Appointment>
+          - colApptBarber : TableColumn<Appointment, String>
+          - colApptCount : TableColumn<Appointment, String>
+          - colApptType : TableColumn<Appointment, String>
+          - colBarber : TableColumn<Appointment, String>
+          - colCount2 : TableColumn<Pet, String>
+          - colEnd : TableColumn<Appointment, LocalDateTime>
+          - colPetType : TableColumn<Appointment, String>
+          - colPetType2 : TableColumn<Pet, String>
+          - colStart : TableColumn<Appointment, LocalDateTime>
+          - colStartDate : TableColumn<Appointment, LocalDate>
+          - colType : TableColumn<Appointment, String>
+          - comboMonth : JFXComboBox
+          - datePickerSchlFrom : JFXDatePicker
+          - datePickerSchlTo : JFXDatePicker
+          - dtformat : DateTimeFormatter
+          - labelReportMenu : Label
+          - labelSub : Label
+          - menu : MenuItem
+          - monthSet : ObservableSet<String>
+          - newZoneId : ZoneId
+          - petList : ObservableList<Pet>
+          - reportDatePicker : DatePicker
+          - schedule : ObservableList<Appointment>
+          - selTab : Tab
+          - tabApptType : Tab
+          - tabCustomerDetail : Tab
+          - tabMenu : TabPane
+          - tabScheduleDetails : Tab
+          - tblApptType : TableView<Appointment>
+          - tblCustData : TableView<Pet>
+          - tblSchedule : TableView<Appointment>
+          + ReportScreenController()
+          + setMainController()
+          - filterMonth()
+          - filterScheduleDates()
+          - initCol()
+          - populateApptTypeList()
+          - populatePetReport()
+          - populateSchedule()
+          - setDefaultDates()
+      }
+    }
+  }
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace viewcontroller {
+      class com.poshpaws.appscheduler.viewcontroller.TempLoader {
+          {static} + main()
+          + start()
+      }
+    }
+  }
+  
+
+  com.poshpaws.appscheduler.viewcontroller.AppointmentListController .up.|> javafx.fxml.Initializable
+  com.poshpaws.appscheduler.viewcontroller.AppointmentListController o-- com.poshpaws.appscheduler.model.User : currentUser
+  com.poshpaws.appscheduler.viewcontroller.AppointmentListController o-- com.poshpaws.appscheduler.jCalendar : mainApp
+  com.poshpaws.appscheduler.viewcontroller.AppointmentLoader -up-|> javafx.application.Application
+  com.poshpaws.appscheduler.viewcontroller.Appointment_AddController o-- com.poshpaws.appscheduler.model.User : currentUser
+  com.poshpaws.appscheduler.viewcontroller.Appointment_AddController o-- com.poshpaws.appscheduler.jCalendar : mainApp
+  com.poshpaws.appscheduler.viewcontroller.Appointment_AddController o-- com.poshpaws.appscheduler.model.Appointment : selectedAppt
+  com.poshpaws.appscheduler.viewcontroller.BarberAddController o-- com.poshpaws.appscheduler.model.User : currentUser
+  com.poshpaws.appscheduler.viewcontroller.BarberAddController o-- com.poshpaws.appscheduler.jCalendar : mainApp
+  com.poshpaws.appscheduler.viewcontroller.BarberScreenController o-- com.poshpaws.appscheduler.model.User : currentUser
+  com.poshpaws.appscheduler.viewcontroller.BarberScreenController o-- com.poshpaws.appscheduler.jCalendar : mainApp
+  com.poshpaws.appscheduler.viewcontroller.CustomerPaneController o-- com.poshpaws.appscheduler.model.User : currentUser
+  com.poshpaws.appscheduler.viewcontroller.CustomerPaneController o-- com.poshpaws.appscheduler.jCalendar : mainApp
+  com.poshpaws.appscheduler.viewcontroller.CustomerPaneController o-- com.poshpaws.appscheduler.model.Appointment : selectedAppt
+  com.poshpaws.appscheduler.viewcontroller.CustomerPaneController o-- com.poshpaws.appscheduler.model.Pet : selectedPet
+  com.poshpaws.appscheduler.viewcontroller.CustomerScreenController o-- com.poshpaws.appscheduler.model.User : currentUser
+  com.poshpaws.appscheduler.viewcontroller.CustomerScreenController o-- com.poshpaws.appscheduler.model.Customer : customer
+  com.poshpaws.appscheduler.viewcontroller.CustomerScreenController o-- com.poshpaws.appscheduler.jCalendar : mainApp
+  com.poshpaws.appscheduler.viewcontroller.LoginScreenController o-- com.poshpaws.appscheduler.model.User : user
+  com.poshpaws.appscheduler.viewcontroller.LoginScreenController o-- com.poshpaws.appscheduler.model.User : currentUser
+  com.poshpaws.appscheduler.viewcontroller.LoginScreenController o-- com.poshpaws.appscheduler.jCalendar : mainApp
+  com.poshpaws.appscheduler.viewcontroller.MainScreenController o-- com.poshpaws.appscheduler.model.User : currentUser
+  com.poshpaws.appscheduler.viewcontroller.MainScreenController o-- com.poshpaws.appscheduler.jCalendar : mainApp
+  com.poshpaws.appscheduler.viewcontroller.ReportScreenController o-- com.poshpaws.appscheduler.jCalendar : mainApp
+  com.poshpaws.appscheduler.viewcontroller.TempLoader -up-|> javafx.application.Application
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

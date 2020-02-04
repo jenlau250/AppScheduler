@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1150.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poshpaws.appscheduler.viewcontroller.AppointmentScreenController">
+   <children>
+      <SplitPane fx:id="splitPane" dividerPositions="0.24299065420560748" layoutX="147.0" layoutY="97.0" prefHeight="750.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <VBox fx:id="apptVBox" layoutX="36.0" layoutY="73.0" prefHeight="598.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Pane prefHeight="100.0" prefWidth="209.0">
+                           <children>
+                              <Label fx:id="labelAppt" alignment="CENTER" layoutX="53.0" layoutY="47.0" prefHeight="53.0" prefWidth="104.0" text="Label" />
+                           </children>
+                        </Pane>
+                        <GridPane prefHeight="291.0" prefWidth="354.0">
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="71.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.0" minWidth="10.0" prefWidth="119.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="112.0" minWidth="10.0" prefWidth="24.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                              <RowConstraints />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="58.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <TextField fx:id="txtLocation" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                              <Label text="End" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
+                                 <padding>
+                                    <Insets right="10.0" />
+                                 </padding>
+                              </Label>
+                              <Label text="Customer" GridPane.halignment="RIGHT">
+                                 <padding>
+                                    <Insets right="10.0" top="10.0" />
+                                 </padding>
+                              </Label>
+                              <TextField fx:id="txtTitle" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Label text="Start" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+                                 <padding>
+                                    <Insets right="10.0" />
+                                 </padding>
+                              </Label>
+                              <Label text="Title" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                                 <padding>
+                                    <Insets right="10.0" top="10.0" />
+                                 </padding>
+                              </Label>
+                              <Label text="Type" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                                 <padding>
+                                    <Insets right="10.0" top="10.0" />
+                                 </padding>
+                              </Label>
+                              <Label text="Location" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+                                 <padding>
+                                    <Insets right="10.0" top="10.0" />
+                                 </padding>
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                              </Label>
+                              <ComboBox fx:id="comboStart" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <ComboBox fx:id="comboEnd" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <Label text="Date" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                                 <padding>
+                                    <Insets right="10.0" top="10.0" />
+                                 </padding>
+                              </Label>
+                              <ComboBox fx:id="comboCustomer" prefWidth="150.0" GridPane.columnIndex="1" />
+                              <ComboBox fx:id="comboType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                           </children>
+                        </GridPane>
+                        <HBox alignment="CENTER" prefHeight="51.0" prefWidth="209.0">
+                           <children>
+                              <Pane prefHeight="51.0" prefWidth="37.0" />
+                              <Button fx:id="btnApptSave" mnemonicParsing="false" onAction="#handleApptSave" prefHeight="22.0" prefWidth="52.0" text="Save" />
+                              <Pane prefHeight="51.0" prefWidth="23.0" />
+                              <Button fx:id="btnApptCancel" mnemonicParsing="false" onAction="#handleApptCancel" prefHeight="25.0" prefWidth="55.0" text="Cancel" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children></AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="589.0" prefWidth="688.0">
+               <children>
+                  <TableView fx:id="ApptTable" layoutX="20.0" layoutY="105.0" prefHeight="337.0" prefWidth="655.0" stylesheets="@../styles/jfx-table-view.css">
+                    <columns>
+                      <TableColumn fx:id="tCustomer" prefWidth="87.0" text="Customer" />
+                      <TableColumn fx:id="tStartDate" prefWidth="119.0" text="Start Date" />
+                        <TableColumn fx:id="tEndDate" prefWidth="109.0" text="End Date" />
+                        <TableColumn fx:id="tTitle" minWidth="7.0" prefWidth="93.0" text="Title" />
+                        <TableColumn fx:id="tType" prefWidth="87.0" text="Type" />
+                        <TableColumn fx:id="tLocation" prefWidth="83.0" text="Location" />
+                        <TableColumn fx:id="tUser" prefWidth="75.0" text="User" />
+                    </columns>
+                  </TableView>
+                  <Label layoutX="9.0" layoutY="14.0" prefHeight="45.0" prefWidth="125.0" text="Appointments">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="labelMainAppt" layoutX="134.0" layoutY="28.0" text="Label" />
+                  <Separator layoutY="536.0" prefHeight="0.0" prefWidth="844.0" />
+                  <ChoiceBox fx:id="choiceWeekMonth" layoutX="222.0" layoutY="67.0" prefWidth="150.0" />
+                  <Button fx:id="btnNext" layoutX="380.0" layoutY="67.0" mnemonicParsing="false" text="&gt;&gt;" />
+                  <Button fx:id="btnBack" layoutX="182.0" layoutY="67.0" mnemonicParsing="false" text="&lt;&lt;" />
+                  <Label fx:id="labelEndBound" alignment="TOP_LEFT" layoutX="423.0" layoutY="71.0" prefHeight="17.0" prefWidth="125.0" text="Label">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label fx:id="labelStartBound" alignment="TOP_RIGHT" layoutX="14.0" layoutY="71.0" prefHeight="17.0" prefWidth="156.0" text="Label">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <HBox alignment="CENTER" layoutX="146.0" layoutY="460.0" prefHeight="45.0" prefWidth="381.0" spacing="30.0">
+                     <children>
+                      <Button fx:id="btnApptAdd" mnemonicParsing="false" onAction="#handleApptAdd" text="Add" />
+                        <Button fx:id="btnApptUpdate" mnemonicParsing="false" onAction="#handleApptEdit" text="Update" />
+                        <Button fx:id="btnApptDel" mnemonicParsing="false" onAction="#handleApptDelete" text="Delete" textAlignment="JUSTIFY" />
+                     </children>
+                  </HBox>
+                  <JFXButton fx:id="btnNewAdd" layoutX="92.0" layoutY="470.0" onAction="#handleApptAddNew" style="-fx-background-color: lightblue;" text="ADD TO NEW" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

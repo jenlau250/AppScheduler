@@ -1,0 +1,215 @@
+@startuml
+
+title __MODEL's Class Diagram__\n
+
+    namespace model {
+      class com.poshpaws.appscheduler.model.Appointment {
+          - appointmentId : StringProperty
+          {static} - apptTypes : ObservableList<String>
+          - barber : ObjectProperty<Barber>
+          - count : String
+          - customer : ObjectProperty<Customer>
+          - description : StringProperty
+          - end : ObjectProperty<LocalDateTime>
+          {static} - endTimes : ObservableList<String>
+          - month : String
+          - pet : ObjectProperty<Pet>
+          - start : ObjectProperty<LocalDateTime>
+          - startDate : ObjectProperty<LocalDate>
+          {static} - startTimes : ObservableList<String>
+          - type : StringProperty
+          - user : String
+          + Appointment()
+          + Appointment()
+          + Appointment()
+          + Appointment()
+          + appointmentIdProperty()
+          + barberProperty()
+          + customerProperty()
+          + descriptionProperty()
+          + endProperty()
+          + getAppointmentId()
+          {static} + getApptTypes()
+          + getBarber()
+          + getCount()
+          + getCustomer()
+          {static} + getDefaultEndTimes()
+          {static} + getDefaultStartTimes()
+          + getDescription()
+          + getEnd()
+          + getMonth()
+          + getPet()
+          + getStart()
+          + getStartDate()
+          + getType()
+          + getUser()
+          + petProperty()
+          + setAppointmentId()
+          + setBarber()
+          + setCount()
+          + setCustomer()
+          + setDescription()
+          + setMonth()
+          + setPet()
+          + setType()
+          + setUser()
+          + startDateProperty()
+          + startProperty()
+          + toString()
+          + typeProperty()
+      }
+    }
+
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace model {
+      class com.poshpaws.appscheduler.model.Barber {
+          - active : SimpleBooleanProperty
+          - barberEmail : StringProperty
+          - barberId : StringProperty
+          - barberName : StringProperty
+          - barberPhone : StringProperty
+          - hireDate : ObjectProperty<LocalDate>
+          - notes : StringProperty
+          + Barber()
+          + Barber()
+          + Barber()
+          + activeProperty()
+          + barberEmailProperty()
+          + barberIdProperty()
+          + barberPhoneProperty()
+          + getActive()
+          + getBarberId()
+          + getBarberName()
+          + getEmail()
+          + getHireDate()
+          + getNotes()
+          + getPhone()
+          + hireDateProperty()
+          + nameProperty()
+          + noteProperty()
+          + setActive()
+          + setBarberId()
+          + setBarberName()
+          + setEmail()
+          + setHireDate()
+          + setNotes()
+          + setPhone()
+          + toString()
+      }
+    }
+  }
+  
+
+
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace model {
+      class com.poshpaws.appscheduler.model.Customer {
+          - active : SimpleBooleanProperty
+          - count : String
+          - customerEmail : StringProperty
+          - customerId : StringProperty
+          - customerName : StringProperty
+          - customerPhone : StringProperty
+          - notes : StringProperty
+          - pets : ObservableList<Pet>
+          + Customer()
+          + Customer()
+          + Customer()
+          + Customer()
+          + activeProperty()
+          + customerEmailProperty()
+          + customerIdProperty()
+          + customerNameProperty()
+          + customerPhoneProperty()
+          + getActive()
+          + getCustomerId()
+          + getCustomerName()
+          + getEmail()
+          + getNotes()
+          + getPets()
+          + getPhone()
+          + noteProperty()
+          + setActive()
+          + setCustomerId()
+          + setCustomerName()
+          + setEmail()
+          + setNotes()
+          + setPhone()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace model {
+      class com.poshpaws.appscheduler.model.Pet {
+          - active : StringProperty
+          - count : String
+          - customerId : StringProperty
+          - image : String
+          - petDescription : StringProperty
+          - petId : StringProperty
+          - petName : StringProperty
+          - petType : StringProperty
+          {static} - petTypes : ObservableList<String>
+          + Pet()
+          + Pet()
+          + Pet()
+          + Pet()
+          + activeProperty()
+          + customerIdProperty()
+          + descProperty()
+          + getActive()
+          + getCount()
+          + getCustomerId()
+          + getImage()
+          + getPetDesc()
+          + getPetId()
+          + getPetName()
+          + getPetType()
+          {static} + getPetTypes()
+          + nameProperty()
+          + petIdProperty()
+          + setCount()
+          + setImage()
+          + toString()
+          + typeProperty()
+      }
+    }
+  }
+  
+
+  namespace com.poshpaws.appscheduler {
+    namespace model {
+      class com.poshpaws.appscheduler.model.User {
+          - password : String
+          - userId : int
+          - userName : String
+          + User()
+          + User()
+          + getPassword()
+          + getUserId()
+          + getUserName()
+          + setPassword()
+          + setUserId()
+          + setUserName()
+      }
+    }
+  }
+  
+
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml
