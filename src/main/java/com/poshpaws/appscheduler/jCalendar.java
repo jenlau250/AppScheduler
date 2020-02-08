@@ -329,6 +329,25 @@ public class jCalendar extends Application {
         }
     }
 
+    public void showCustomerPane() {
+
+        try {
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(jCalendar.class.getResource("/fxml/CustomerPane2.fxml"));
+            screen = (AnchorPane) loader.load();
+
+            mainScreen.setBottom(screen);
+
+            CustomerPaneController controller = loader.getController();
+            controller.setMainController(this, currUser);
+//            controller.setSelected(selCustomer);
+//            controller.setSelectedAppointment(selectedAppt);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public void closeBottomBorder() {
 
         mainScreen.setBottom(null);

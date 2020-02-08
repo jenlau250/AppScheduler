@@ -8,7 +8,10 @@ package com.poshpaws.appscheduler.viewcontroller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.events.JFXDialogEvent;
 import com.poshpaws.appscheduler.cache.CustomerCache;
 import com.poshpaws.appscheduler.cache.PetCache;
 import com.poshpaws.appscheduler.dao.DBConnection;
@@ -43,8 +46,10 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
@@ -178,7 +183,9 @@ public class CustomerScreenController {
     @FXML
     void handleAddCustomer(ActionEvent event) {
 
+//        mainApp.showCustomerPane();
         editMode = false;
+        CustomerTable.setDisable(true);
         showButtons();
 
         //Add mode, disable other buttons except Save and Cancel
@@ -197,7 +204,6 @@ public class CustomerScreenController {
 
         clearFields();
         enableEdits();
-
     }
 
     @FXML
@@ -310,44 +316,45 @@ public class CustomerScreenController {
     @FXML
     void handleUpdateCustomer(ActionEvent event) {
 
-        Customer selectedCustomer = CustomerTable.getSelectionModel().getSelectedItem();
-        mainApp.showCustomerPane(selectedCustomer);
-//        enableEdits();
-//        showButtons();
-//        customerLabel.setText("Update Customer Details");
-//
 //        Customer selectedCustomer = CustomerTable.getSelectionModel().getSelectedItem();
-//
-//        if (selectedCustomer != null) {
-//            editMode = true;
-//            CustomerTable.setDisable(false);
-//            btnCustomerAdd.setDisable(true);
-//            btnCustomerUpdate.setDisable(true);
-//            btnCustomerDelete.setDisable(true);
-//
-//        } else {
-//            BoxBlur blur = new BoxBlur(3, 3, 3);
-//            JFXDialogLayout dialogLayout = new JFXDialogLayout();
-//            JFXButton button = new JFXButton("OK");
-//            button.getStyleClass().add("dialog-button");
-//            JFXDialog dialog = new JFXDialog(rootPane, dialogLayout, JFXDialog.DialogTransition.CENTER);
-//            button.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent mouseEvent) -> {
-//                dialog.close();
-//            });
-//
-//            dialogLayout.setHeading(new Label("No customer was selected to update."));
-//            dialogLayout.setActions(button);
-//            dialog.show();
-//            dialog.setOnDialogClosed((JFXDialogEvent event1) -> {
-//                rootAnchorPane.setEffect(null);
-//            });
-//            rootAnchorPane.setEffect(blur);
-//            Alert alert = new Alert(Alert.AlertType.WARNING);
-//            alert.setTitle("Not selected");
-//            alert.setHeaderText("No customer was selected");
-//            alert.setContentText("Please select a customer to update");
-//            alert.showAndWait();
-//        }
+//        mainApp.showCustomerPane(selectedCustomer);
+        enableEdits();
+        showButtons();
+        CustomerTable.setDisable(true);
+        customerLabel.setText("Update Customer Details");
+
+        Customer selectedCustomer = CustomerTable.getSelectionModel().getSelectedItem();
+
+        if (selectedCustomer != null) {
+            editMode = true;
+            CustomerTable.setDisable(false);
+            btnCustomerAdd.setDisable(true);
+            btnCustomerUpdate.setDisable(true);
+            btnCustomerDelete.setDisable(true);
+
+        } else {
+            BoxBlur blur = new BoxBlur(3, 3, 3);
+            JFXDialogLayout dialogLayout = new JFXDialogLayout();
+            JFXButton button = new JFXButton("OK");
+            button.getStyleClass().add("dialog-button");
+            JFXDialog dialog = new JFXDialog(rootPane, dialogLayout, JFXDialog.DialogTransition.CENTER);
+            button.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent mouseEvent) -> {
+                dialog.close();
+            });
+
+            dialogLayout.setHeading(new Label("No customer was selected to update."));
+            dialogLayout.setActions(button);
+            dialog.show();
+            dialog.setOnDialogClosed((JFXDialogEvent event1) -> {
+                rootAnchorPane.setEffect(null);
+            });
+            rootAnchorPane.setEffect(blur);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Not selected");
+            alert.setHeaderText("No customer was selected");
+            alert.setContentText("Please select a customer to update");
+            alert.showAndWait();
+        }
     }
 
     /**
@@ -385,6 +392,36 @@ public class CustomerScreenController {
             }
         });
 
+//        // On selected item
+//        CustomerTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
+//
+//            @Override
+//            public void changed(ObservableValue<? extends Customer> observable, Customer oldValue, Customer newValue) {
+//
+//                // Create a new FXML loader
+//                FXMLLoader loader = new FXMLLoader(getClass().getResource("CustomerPane2.fxml"));
+//                try {
+//                    // Load the another FXML file
+//                    Parent newParent = loader.load();
+//                    CustomerPaneController subController = loader.getController();
+//                    // Set the String property
+//                    // If you want to use data from the current selection: newValue contains the currently selected Person
+//                    // TODO: Get value from DB
+//                    subController.textToDisplay.set("value from DB for Person" + newValue.getCustomerId());
+//
+//                    // newParent contains the root of your other FXML file, do anything that you want to do with it (e.g. add to the current node graph)
+//                    // Now I just simply open it in a new window
+//                    Stage newStage = new Stage();
+//                    Scene newScene = new Scene(newParent);
+//                    newStage.setScene(newScene);
+//                    newStage.show();
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//        });
         //Populate pet type and description based on selected pet
         cbPetSelection.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
@@ -501,6 +538,8 @@ public class CustomerScreenController {
         clearFields();
         editMode = false;
         hideButtons();
+
+        txtCustomerName.requestFocus();
     }
 
     private void hideButtons() {
@@ -813,12 +852,7 @@ public class CustomerScreenController {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 InputStream is = rs.getBinaryStream("image");
-
-                //check image size, maybe not hard coded,
-//                maybe store image size in db
                 Image image = new Image(is);
-//                Image image = new Image(is, 250, 300, false, true);
-
                 petPhoto.setImage(image);
                 petLabel.setText(p.getPetName() + "'s Photo!");
                 return true;

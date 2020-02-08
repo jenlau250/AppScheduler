@@ -80,15 +80,6 @@
     <version>8.20.8</version>
 </dependency>
 
-
-        <!-- MigLayout -->
-
-        <dependency>
-            <groupId>com.miglayout</groupId>
-            <artifactId>miglayout-javafx</artifactId>
-            <version>5.0</version>
-        </dependency>
-
         <!-- Apache Commons -->
 
         <dependency>
@@ -131,11 +122,17 @@
 </dependency>
 
 <dependency>
-  <groupId>org.assertj</groupId>
-  <artifactId>assertj-core</artifactId>
-  <!-- use 2.9.1 for Java 7 projects -->
-  <version>3.15.0</version>
-  <scope>test</scope>
+    <groupId>org.assertj</groupId>
+    <artifactId>assertj-core</artifactId>
+    <version>3.13.2</version>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.testfx</groupId>
+    <artifactId>testfx-core</artifactId>
+    <version>4.0.16-alpha</version>
+    <scope>test</scope>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/junit/junit -->
@@ -146,7 +143,30 @@
     <scope>test</scope>
 </dependency>
 
-
+<dependency>
+  <groupId>org.dbunit</groupId>
+  <artifactId>dbunit</artifactId>
+  <version>2.6.0</version>
+  <scope>test</scope>
+</dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <scope>test</scope>
+            <version>2.44.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.opera</groupId>
+            <artifactId>operadriver</artifactId>
+            <scope>test</scope>
+            <version>1.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-remote-driver</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
 </project>

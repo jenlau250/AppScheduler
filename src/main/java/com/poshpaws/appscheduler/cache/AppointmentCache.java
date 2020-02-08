@@ -8,6 +8,8 @@ package com.poshpaws.appscheduler.cache;
 import com.poshpaws.appscheduler.dao.AppointmentDaoImpl;
 import com.poshpaws.appscheduler.model.Appointment;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -17,6 +19,9 @@ import javafx.collections.ObservableList;
  */
 public class AppointmentCache {
 
+    public static final AppointmentCache SINGLETON = new AppointmentCache();
+    public static ArrayList<Appointment> TESTING = null;
+
     private static ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
 
     public static ObservableList<Appointment> getAllAppointments() {
@@ -25,9 +30,19 @@ public class AppointmentCache {
         return returnList;
     }
 
-    public static ObservableList<Appointment> getBarberAppointments(int barberId) {
+    public static List<Appointment> getBarberAppointmentsTest(String barberId) {
 
-        ObservableList<Appointment> returnList = FXCollections.observableArrayList();
+        if (TESTING == null) {
+            return getBarberAppointments(barberId);
+        } else {
+            return TESTING;
+        }
+
+    }
+
+    public static List<Appointment> getBarberAppointments(String barberId) {
+
+        List<Appointment> returnList = new ArrayList<>();
 
         for (Appointment a : appointmentList) {
             if (a.getBarber().getBarberId().equals(barberId)) {
@@ -37,6 +52,27 @@ public class AppointmentCache {
 
         return returnList;
 
+    }
+
+    public static Boolean checkAppointmentOverlap(Appointment a) {
+        System.out.println("********************************************Hi********");
+        boolean overlap = false;
+
+        List<Appointment> appointmentsForBarber = new ArrayList<>();
+        appointmentsForBarber = getBarberAppointmentsTest(a.getBarber().getBarberId());
+
+//add this appointment after checking for conflicts
+        appointmentsForBarber.remove(a);
+        for (Appointment other : appointmentsForBarber) {
+//            /t1.begin.isBefore(t2.end) && t2.begin.isBefore(t1.end)
+            if (a.getStart().isBefore(other.getEnd()) && other.getStart().isBefore(a.getEnd())) {
+                overlap = true;
+            }
+        }
+        //add back after validating
+        appointmentsForBarber.add(a);
+        return overlap;
+//        return true;
     }
 
     public static Appointment getAppointment(String appointmentId) {

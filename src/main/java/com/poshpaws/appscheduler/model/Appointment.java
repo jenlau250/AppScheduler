@@ -74,6 +74,12 @@ public class Appointment {
         this.count = count;
     }
 
+    public Appointment(LocalDateTime start, LocalDateTime end, Barber b) {
+        this.start.set(start);
+        this.end.set(end);
+        this.barber.set(b);
+    }
+
     public String getAppointmentId() {
         return appointmentId.get();
     }
@@ -104,6 +110,14 @@ public class Appointment {
 
     public LocalDateTime getStart() {
         return start.get();
+    }
+
+    public void setStart(LocalDateTime start) {
+        this.start.set(start);
+    }
+
+    public void setEnd(LocalDateTime end) {
+        this.end.set(end);
     }
 
     public ObjectProperty endProperty() {

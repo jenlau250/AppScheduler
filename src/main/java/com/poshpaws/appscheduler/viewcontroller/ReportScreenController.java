@@ -33,11 +33,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -51,27 +46,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class ReportScreenController {
 
     private jCalendar mainApp;
-//    private User currentUser;
-    private MenuItem menu;
 
-    @FXML
-    private Label labelReportMenu;
-    @FXML
-    private Label labelSub;
-
-    @FXML
-    private TabPane tabMenu;
-    @FXML
-    private Tab tabScheduleDetails;
-    @FXML
-    private Tab selTab;
-    @FXML
-    private Tab tabApptType;
-    @FXML
-    private Tab tabCustomerDetail;
-
-    @FXML
-    private DatePicker reportDatePicker;
     @FXML
     private TableView<Appointment> tblSchedule;
     @FXML
@@ -95,15 +70,7 @@ public class ReportScreenController {
     @FXML
     private TableColumn<Appointment, String> colApptCount;
     @FXML
-    private TableColumn<Appointment, String> colApptBarber;
-//    @FXML
-//    private TableColumn<Appointment, String> colApptMonth;
-    @FXML
-    private TableView<Pet> tblCustData;
-    @FXML
-    private TableColumn<Pet, String> colCount2;
-    @FXML
-    private TableColumn<Pet, String> colPetType2;
+    private TableColumn<Appointment, Barber> colApptBarber;
 
     @FXML
     private JFXDatePicker datePickerSchlTo;
@@ -136,22 +103,12 @@ public class ReportScreenController {
     public void setMainController(jCalendar mainApp) {
 
         this.mainApp = mainApp;
-        //        this.currentUser = currentUser;
-//        ;
 
-//        List<Appointment> list = new ArrayList<>();
-//        list.addAll(AppointmentCache.getAllAppointments());
-//
-//        Map<String, Long> counted = list.stream()
-//                .collect(Collectors.groupingBy(Appointment::getType, Collectors.counting()));
-//
-//        System.out.println(counted);
-//        //Result: {Bath & Haircut=3, Bath=1, Bath & Brush=3}
         populateApptTypeList();
-        populatePetReport();
         populateSchedule();
 
         initCol();
+
         setDefaultDates();
 
         ObservableList<String> newList = FXCollections.observableArrayList(monthSet);
@@ -202,8 +159,6 @@ public class ReportScreenController {
         FilteredList<Appointment> filteredData = new FilteredList<>(apptList);
         filteredData.setPredicate(row -> {
             String rowMonth = row.getMonth();
-//            LocalDate rowDate = LocalDate.parse(row.getStart(), dtformat);
-//            String rowMonth = rowDate.getMonth().name();
             return rowMonth.equals(month);
         });
 
@@ -243,10 +198,6 @@ public class ReportScreenController {
                     + "FROM appointment "
                     + "GROUP BY MONTHNAME(`start`), barberId, type "
                     + "ORDER BY count desc");
-//                    "SELECT MONTHNAME(`start`) AS \"month\", type AS \"type\", COUNT(*) as \"count\" "
-//                    + "FROM appointment "
-//                    + "GROUP BY MONTHNAME(`start`), type "
-//                    + "ORDER BY count desc");
 
             ResultSet rs = statement.executeQuery();
 
@@ -265,34 +216,7 @@ public class ReportScreenController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        tblApptType.getItems().setAll(apptList);
-    }
-
-    private void populatePetReport() {
-
-        petList = FXCollections.observableArrayList();
-
-        try {
-            PreparedStatement pst = DBConnection.getConn().prepareStatement(
-                    "SELECT petType, COUNT(*) as \"count\" "
-                    + "FROM pet "
-                    + "GROUP BY petType "
-                    + "ORDER BY count desc");
-
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                String petType = rs.getString("petType");
-                String count = rs.getString("count");
-                petList.add(new Pet(petType, count));
-            }
-
-        } catch (SQLException sqe) {
-            sqe.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        tblCustData.setItems(petList);
+        tblApptType.setItems(apptList);
     }
 
     private void populateSchedule() {
@@ -308,21 +232,13 @@ public class ReportScreenController {
         colStartDate.setCellValueFactory(f -> f.getValue().startDateProperty());
         colStart.setCellValueFactory(new PropertyValueFactory<>("start"));
         colEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
-        colBarber.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getBarber().getBarberName()));
         colType.setCellValueFactory(new PropertyValueFactory<>("type"));
-//        colCustomer.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getCustomer().customerNameProperty().get()));
         colPetType.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getPet().getPetType()));
 
         //barber report
         colApptType.setCellValueFactory(new PropertyValueFactory<>("type"));
-//        colApptMonth.setCellValueFactory(new PropertyValueFactory<>("month"));
+        colApptBarber.setCellValueFactory(new PropertyValueFactory<>("barber"));
         colApptCount.setCellValueFactory(new PropertyValueFactory<>("count"));
-//COLAPPTBARBER CAUSING ISSUES
-//        colApptBarber.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getBarber().nameProperty().get()));
-        //customer report
-
-        colCount2.setCellValueFactory(new PropertyValueFactory<>("count"));
-        colPetType2.setCellValueFactory(new PropertyValueFactory<>("petType"));
 
     }
 

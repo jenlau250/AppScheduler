@@ -5,6 +5,7 @@
  */
 package com.poshpaws.appscheduler.model;
 
+import java.util.Objects;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -185,22 +186,21 @@ public class Customer {
 //    public String toString() {
 //        return String.valueOf(customerName);
 //    }
-//
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (o == null || getClass() != o.getClass()) {
-//            return false;
-//        }
-//        Customer that = (Customer) o;
-//        return Objects.equals(customerId.get(), that.customerId.get())
-//                && Objects.equals(customerName.get(), that.customerName.get());
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(customerId.get(), customerName.get());
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Customer that = (Customer) o;
+        return Objects.equals(customerId.get(), that.customerId.get())
+                && Objects.equals(customerName.get(), that.customerName.get());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(customerId.get(), customerName.get());
+    }
 }

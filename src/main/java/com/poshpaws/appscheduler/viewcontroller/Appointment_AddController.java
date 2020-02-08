@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import com.poshpaws.appscheduler.cache.AppointmentCache;
 import com.poshpaws.appscheduler.cache.BarberCache;
 import com.poshpaws.appscheduler.cache.CustomerCache;
 import com.poshpaws.appscheduler.cache.PetCache;
@@ -34,6 +35,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javafx.collections.FXCollections;
@@ -127,8 +129,13 @@ public class Appointment_AddController {
     private ObservableList<Appointment> data;
     private ObservableList<Pet> selectedPets = FXCollections.observableArrayList();
     private ObservableList<Customer> customers = FXCollections.observableArrayList();
+    private AppointmentCache cache;
 
+    public Appointment_AddController() {
+        this.cache = AppointmentCache.SINGLETON;
+    }
 //    Customer customer;
+
     /**
      * Initializes the controller class.
      *
@@ -227,6 +234,8 @@ public class Appointment_AddController {
 
     private void initNewFields() {
 
+        comboStart.getItems().clear();
+        comboEnd.getItems().clear();
         comboStart.setItems(Appointment.getDefaultStartTimes());
         comboEnd.setItems(Appointment.getDefaultEndTimes());
         //Get Appointment Type options
@@ -261,13 +270,13 @@ public class Appointment_AddController {
             LocalTime localEnd = DateTimeUtil.parseStringToTimeFormat(endTime);
 
             //Convert to LocalDateTime
-            LocalDateTime startDate = LocalDateTime.of(localDate, localStart);
-            LocalDateTime endDate = LocalDateTime.of(localDate, localEnd);
+            LocalDateTime ldtStart = LocalDateTime.of(localDate, localStart);
+            LocalDateTime ldtEnd = LocalDateTime.of(localDate, localEnd);
 
             //Convert datetime for database ex: 2020-02-11T22:00Z[UTC]
             ZoneId zid = ZoneId.systemDefault();
-            ZonedDateTime startUTC = startDate.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));
-            ZonedDateTime endUTC = endDate.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));
+            ZonedDateTime startUTC = ldtStart.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));
+            ZonedDateTime endUTC = ldtEnd.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));
 
             Timestamp startsql = Timestamp.valueOf(startUTC.toLocalDateTime());
             Timestamp endsql = Timestamp.valueOf(endUTC.toLocalDateTime());
@@ -278,7 +287,20 @@ public class Appointment_AddController {
 
             Barber b = comboBarber.getSelectionModel().getSelectedItem();
 
-            if (validateApptOverlap(stringStart, stringEnd, b)) {
+            //Exclude existing appointment from list to check against
+            //so you are not comparing the same appointment
+            //however if it's a new appointment, it won't be on the list.
+            //instead of this: Appointment apptToValidate = new Appointment(ldtStart, ldtEnd, b);
+            Appointment check = new Appointment();
+            if (editClicked) {
+                check = selectedAppt;
+            } else {
+                check.setBarber(b);
+                check.setStart(ldtStart);
+                check.setEnd(ldtEnd);
+            }
+
+            if (AppointmentCache.checkAppointmentOverlap(check)) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Appointment Overlap");
                 alert.setHeaderText("Warning: Appointment was not saved");
@@ -288,9 +310,9 @@ public class Appointment_AddController {
             } else {
 
                 if (editClicked) {
-                    updateAppointment(startsql, endsql);
+                    updateAppointment(stringStart, stringEnd);
                 } else {
-                    saveNewAppointment(startsql, endsql);
+                    saveNewAppointment(stringStart, stringEnd);
                 }
 
                 //Return to list
@@ -302,13 +324,15 @@ public class Appointment_AddController {
 
     public void setSelectedAppointment(Appointment appt) {
         //initialize update fields here
+
+        selectedAppt = appt;
         editClicked = true;
         topLabel.setText("Edit Appointment Details");
-        showAppointmentDetails(appt);
+        showAppointmentDetails(selectedAppt);
 
     }
 
-    private void updateAppointment(Timestamp startsql, Timestamp endsql) {
+    private void updateAppointment(String stringStart, String stringEnd) {
         System.out.println("Attempting to update appointment..");
 
         //common fields to get
@@ -369,8 +393,8 @@ public class Appointment_AddController {
                     pst.setString(2, sBarber);
                     pst.setInt(3, newPetId);
 
-                    pst.setTimestamp(4, startsql);
-                    pst.setTimestamp(5, endsql);
+                    pst.setString(4, stringStart);
+                    pst.setString(5, stringEnd);
 
                     pst.setString(6, sDesc);
                     pst.setString(7, sType);
@@ -407,8 +431,8 @@ public class Appointment_AddController {
                 ps4.setString(2, sBarber);
                 ps4.setString(3, comboPet.getValue().getPetId());
 
-                ps4.setTimestamp(4, startsql);
-                ps4.setTimestamp(5, endsql);
+                ps4.setString(4, stringStart);
+                ps4.setString(5, stringEnd);
 
                 ps4.setString(6, sDesc);
                 ps4.setString(7, sType);
@@ -441,7 +465,7 @@ public class Appointment_AddController {
         //        String sContact = currentUser.getUserName(); //CHANGE LATER
     }
 
-    private void saveNewAppointment(Timestamp startsql, Timestamp endsql) {
+    private void saveNewAppointment(String stringStart, String stringEnd) {
 
         String sType = comboType.getValue();
         String sBarber = comboBarber.getValue().getBarberId();
@@ -499,8 +523,8 @@ public class Appointment_AddController {
                 pst.setString(2, sBarber);
                 pst.setInt(3, newPetId);
 
-                pst.setTimestamp(4, startsql);
-                pst.setTimestamp(5, endsql);
+                pst.setString(4, stringStart);
+                pst.setString(5, stringEnd);
 
                 pst.setString(6, sDesc);
                 pst.setString(7, sType);
@@ -537,8 +561,8 @@ public class Appointment_AddController {
                 pst.setString(2, sBarber);
                 pst.setString(3, existPetId);
 
-                pst.setTimestamp(4, startsql);
-                pst.setTimestamp(5, endsql);
+                pst.setString(4, stringStart);
+                pst.setString(5, stringEnd);
 
                 pst.setString(6, sDesc);
                 pst.setString(7, sType);
@@ -689,15 +713,42 @@ public class Appointment_AddController {
         }
     }
 
-    public Boolean validateApptOverlap(String sDate, String eDate, Barber b) {
+    public Boolean checkAppointmentOverlap(Appointment a) {
+        boolean overlap = false;
+
+        List<Appointment> appointmentsForBarber = AppointmentCache.getBarberAppointments(a.getBarber().getBarberId());
+
+        //add this appointment after checking for conflicts
+//        appointmentsForBarber.remove(appointment);
+        for (Appointment other : appointmentsForBarber) {
+            if (a.getStart().isBefore(other.getEnd()) && (a.getEnd().isAfter(other.getStart()))) {
+                overlap = true;
+            }
+        }
+        return overlap;
+    }
+
+    public Boolean validateApptOverlap(LocalDateTime ldtStart, LocalDateTime ldtEnd, Barber b) {
         System.out.println("Validating appointment times.. ");
         Boolean overlap = false;
 
-        System.out.println("Timestamp WHERE " + sDate + " between start and end or " + eDate
-                + "\n between start and end or " + sDate + " < start and " + eDate + " with barberId " + b.getBarberId()
+        System.out.println("Timestamp WHERE " + ldtStart + " between start and end or " + ldtEnd
+                + "\n between start and end or " + ldtStart + " < start and " + ldtEnd + " with barberId " + b.getBarberId()
         );
-//        System.out.println("Timestamp " + sDate.toLocalDateTime());
 
+        //Convert datetime for database ex: 2020-02-11T22:00Z[UTC]
+        ZoneId zid = ZoneId.systemDefault();
+        ZonedDateTime startUTC = ldtStart.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));
+        ZonedDateTime endUTC = ldtEnd.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));
+
+        Timestamp startsql = Timestamp.valueOf(startUTC.toLocalDateTime());
+        Timestamp endsql = Timestamp.valueOf(endUTC.toLocalDateTime());
+
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String stringStart = dateFormatter.format(startsql);
+        String stringEnd = dateFormatter.format(endsql);
+
+//        System.out.println("Timestamp " + sDate.toLocalDateTime());
 //Appointment start and end time can't overlap for same barber
         try {
             PreparedStatement ps = DBConnection.getConn().prepareStatement(
@@ -706,12 +757,12 @@ public class Appointment_AddController {
                     + "OR ? BETWEEN start AND end AND barberId = ? "
                     + "OR ? < start AND ? > end AND barberId = ?) "
             );
-            ps.setString(1, sDate);
+            ps.setString(1, stringStart);
             ps.setString(2, b.getBarberId());
-            ps.setString(3, eDate);
+            ps.setString(3, stringEnd);
             ps.setString(4, b.getBarberId());
-            ps.setString(5, sDate);
-            ps.setString(6, eDate);
+            ps.setString(5, stringStart);
+            ps.setString(6, stringEnd);
             ps.setString(7, b.getBarberId());
             ResultSet rs = ps.executeQuery();
 

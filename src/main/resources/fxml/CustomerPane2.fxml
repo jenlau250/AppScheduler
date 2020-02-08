@@ -48,16 +48,16 @@
             </AnchorPane>
             <VBox alignment="TOP_CENTER" prefHeight="513.0" prefWidth="302.0" spacing="15.0">
                <children>
-                  <Label fx:id="apptIdLabel" text="Label" visible="false" />
+                  <Label fx:id="custLabel" text="Label" />
                   <JFXTextField fx:id="txtCustomerName" promptText="Customer Name" text="Name" />
                   <JFXTextField fx:id="txtCustomerPhone" promptText="Phone Number" />
                   <JFXTextField fx:id="txtCustomerEmail" promptText="Email" />
-                  <JFXTextField fx:id="txtNotes" alignment="TOP_LEFT" prefHeight="53.0" prefWidth="205.0" promptText="Notes (Optional)" />
-                  <JFXCheckBox text="Active" />
+                  <JFXTextField fx:id="txtCustomerNotes" alignment="TOP_LEFT" prefHeight="53.0" prefWidth="205.0" promptText="Notes (Optional)" />
+                  <JFXCheckBox fx:id="checkboxActive" text="Active" />
                   <HBox alignment="CENTER" spacing="20.0">
                      <children>
-                        <JFXButton fx:id="btnSaveCust" contentDisplay="TOP" prefHeight="30.0" prefWidth="80.0" styleClass="normalButton" text="Save" />
-                        <JFXButton fx:id="btnDelCust" contentDisplay="TOP" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: lightgray;" styleClass="normalButton" text="Delete" />
+                        <JFXButton fx:id="btnCustomerSave" contentDisplay="TOP" prefHeight="30.0" prefWidth="80.0" styleClass="normalButton" text="Save" />
+                        <JFXButton fx:id="btnCustomerCancelSave" contentDisplay="TOP" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: lightgray;" styleClass="normalButton" text="Delete" />
                      </children>
                      <VBox.margin>
                         <Insets top="10.0" />
@@ -66,6 +66,7 @@
                         <Insets top="20.0" />
                      </padding>
                   </HBox>
+                  <JFXButton fx:id="btnSaveNew" styleClass="normalButton" text="Save New" />
                </children>
                <padding>
                   <Insets bottom="10.0" left="30.0" right="50.0" top="10.0" />
@@ -86,13 +87,14 @@
                   <Label text="Label" visible="false" />
                   <HBox opacity="0.2" />
                   <JFXComboBox fx:id="cbPetSelection" prefHeight="31.0" prefWidth="231.0" promptText="Select Pet" />
-                  <JFXTextField fx:id="txtNewPet" promptText="Pet Name" text="Name" />
+                  <JFXTextField fx:id="txtPetName" promptText="Pet Name" text="Name" />
+                  <JFXComboBox fx:id="comboPetType" prefHeight="25.0" prefWidth="290.0" />
                   <JFXTextField fx:id="txtPetType" promptText="Pet Type" />
-                  <JFXTextField fx:id="txtPetDesc" alignment="TOP_LEFT" prefHeight="40.0" prefWidth="224.0" promptText="Pet Description" />
+                  <JFXTextField fx:id="txtPetDescription" alignment="TOP_LEFT" prefHeight="40.0" prefWidth="224.0" promptText="Pet Description" />
                   <HBox alignment="CENTER" prefHeight="30.0" prefWidth="258.0" spacing="20.0">
                      <children>
-                        <JFXButton fx:id="btnSaveCust" contentDisplay="TOP" prefHeight="30.0" prefWidth="80.0" styleClass="normalButton" text="Save " />
-                        <JFXButton fx:id="btnDeletePet" contentDisplay="TOP" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: lightgray;" styleClass="normalButton" text="Delete" />
+                        <JFXButton fx:id="btnPetSave" contentDisplay="TOP" prefHeight="30.0" prefWidth="80.0" styleClass="normalButton" text="Save " />
+                        <JFXButton fx:id="btnPetDelete" contentDisplay="TOP" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: lightgray;" styleClass="normalButton" text="Delete" />
                      </children>
                      <padding>
                         <Insets top="50.0" />
@@ -126,7 +128,7 @@
                   </JFXButton>
                </children>
                <padding>
-                  <Insets bottom="50.0" />
+                  <Insets bottom="50.0" left="30.0" />
                </padding>
             </VBox>
          </children>

@@ -82,4 +82,8 @@ public class DBConnection {
         }
     }
 
+    public int executeQuery(String query) throws ClassNotFoundException, SQLException {
+        return conn.createStatement().executeUpdate(query);
+    }
+
 }

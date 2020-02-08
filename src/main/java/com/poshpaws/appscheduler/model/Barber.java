@@ -6,6 +6,7 @@
 package com.poshpaws.appscheduler.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -44,6 +45,14 @@ public class Barber {
 
     public StringProperty nameProperty() {
         return barberName;
+    }
+
+    public String getBarberName() {
+        return barberName.get();
+    }
+
+    public void setBarberName(String barberName) {
+        this.barberName.set(barberName);
     }
 
     public StringProperty barberPhoneProperty() {
@@ -104,14 +113,6 @@ public class Barber {
         this.barberId.set(barberId);
     }
 
-    public String getBarberName() {
-        return barberName.get();
-    }
-
-    public void setBarberName(String barberName) {
-        this.barberName.set(barberName);
-    }
-
     public String getNotes() {
         return notes.get();
     }
@@ -134,7 +135,25 @@ public class Barber {
 
     @Override
     public String toString() {
-        return String.valueOf(barberName);
+        return String.valueOf(barberName.get());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // self check
+        if (this == o) {
+            return true;
+        } else // null check
+        if (o == null) {
+            return false;
+        } else // type check and cast
+        if (getClass() != o.getClass()) {
+            return false;
+        } else {
+            final Barber a = (Barber) o;
+            // field comparison
+            return Objects.equals(a, a);
+        }
     }
 
 }

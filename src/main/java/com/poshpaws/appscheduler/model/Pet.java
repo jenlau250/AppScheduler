@@ -5,6 +5,7 @@
  */
 package com.poshpaws.appscheduler.model;
 
+import java.util.Objects;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -142,6 +143,29 @@ public class Pet {
                 + "Name: " + petName + '\n'
                 + "Type: " + petType + '\n'
                 + "Desc: " + petDescription + '\n';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // self check
+        if (this == o) {
+            return true;
+        } else // null check
+        if (o == null) {
+            return false;
+        } else // type check and cast
+        if (getClass() != o.getClass()) {
+            return false;
+        } else {
+            final Pet a = (Pet) o;
+            // field comparison
+            return Objects.equals(a, a);
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(petId.get(), petName.get());
     }
 
 }
