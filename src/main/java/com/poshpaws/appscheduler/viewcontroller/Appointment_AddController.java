@@ -134,7 +134,6 @@ public class Appointment_AddController {
     public Appointment_AddController() {
         this.cache = AppointmentCache.SINGLETON;
     }
-//    Customer customer;
 
     /**
      * Initializes the controller class.
@@ -300,7 +299,7 @@ public class Appointment_AddController {
                 check.setEnd(ldtEnd);
             }
 
-            if (AppointmentCache.checkAppointmentOverlap(check)) {
+            if (cache.checkAppointmentOverlap(check)) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Appointment Overlap");
                 alert.setHeaderText("Warning: Appointment was not saved");

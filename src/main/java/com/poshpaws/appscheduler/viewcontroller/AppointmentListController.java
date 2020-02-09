@@ -238,7 +238,7 @@ public class AppointmentListController implements Initializable {
         labelEndBound.setText(null);
 
         currDate = LocalDate.now();
-        nextMonth(currDate);
+//        nextMonth(currDate);
 
         //first filter list - getAppointments by barber - get all or by ID, THEN use that filtered list for date selection below..
         // Add monthly or weekly filter to tableview

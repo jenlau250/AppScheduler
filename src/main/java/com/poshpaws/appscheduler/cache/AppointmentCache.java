@@ -55,24 +55,23 @@ public class AppointmentCache {
     }
 
     public static Boolean checkAppointmentOverlap(Appointment a) {
-        System.out.println("********************************************Hi********");
         boolean overlap = false;
 
         List<Appointment> appointmentsForBarber = new ArrayList<>();
         appointmentsForBarber = getBarberAppointmentsTest(a.getBarber().getBarberId());
 
-//add this appointment after checking for conflicts
+        //This is to exclude the appointment being updated from comparing to itself
         appointmentsForBarber.remove(a);
         for (Appointment other : appointmentsForBarber) {
-//            /t1.begin.isBefore(t2.end) && t2.begin.isBefore(t1.end)
             if (a.getStart().isBefore(other.getEnd()) && other.getStart().isBefore(a.getEnd())) {
                 overlap = true;
             }
         }
-        //add back after validating
+        //Add back after validation
         appointmentsForBarber.add(a);
+
         return overlap;
-//        return true;
+
     }
 
     public static Appointment getAppointment(String appointmentId) {
