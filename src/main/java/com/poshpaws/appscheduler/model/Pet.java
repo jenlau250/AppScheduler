@@ -45,6 +45,18 @@ public class Pet {
         this.customerId.set(customerId);
     }
 
+//    public Pet(String name, String type, String desc, String customerId) {
+//        this.petName.set(name);
+//        this.petType.set(type);
+//        this.petDescription.set(desc);
+//        this.customerId.set(customerId);
+//    }
+    public Pet(String name, String type, String desc) {
+        this.petName.set(name);
+        this.petType.set(type);
+        this.petDescription.set(desc);
+    }
+
     //used for getPetsByCustomer(customerId)
     public Pet(String id, String name, String type, String desc) {
         this.petId.set(id);

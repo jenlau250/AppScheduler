@@ -12,14 +12,10 @@ import com.poshpaws.appscheduler.model.Appointment;
 import com.poshpaws.appscheduler.model.Barber;
 import com.poshpaws.appscheduler.model.Customer;
 import com.poshpaws.appscheduler.model.Pet;
-import com.poshpaws.appscheduler.util.Loggerutil;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -28,10 +24,6 @@ import javafx.collections.ObservableList;
  * @author Jen
  */
 public class AppointmentDaoImpl {
-
-    private static final DateTimeFormatter dateformat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
-
-    private final static Logger logger = Logger.getLogger(Loggerutil.class.getName());
 
     public ObservableList<Appointment> loadApptData() {
 

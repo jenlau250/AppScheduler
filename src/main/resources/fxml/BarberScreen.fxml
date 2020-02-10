@@ -8,6 +8,8 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
@@ -39,9 +41,17 @@
       </SplitPane>
       <HBox alignment="BOTTOM_LEFT" layoutX="68.0" layoutY="51.0" spacing="20.0">
          <children>
-            <Label alignment="BOTTOM_LEFT" text="Search Barber Name" />
-            <JFXTextField fx:id="filterBarber" />
-            <JFXComboBox fx:id="filterStatus" prefHeight="25.0" prefWidth="151.0" promptText="Status Filter">
+            <HBox alignment="BOTTOM_LEFT" spacing="5.0">
+               <children>
+                  <ImageView fitHeight="23.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/search%20(1).png" />
+                     </image>
+                  </ImageView>
+                  <JFXTextField fx:id="filterBarber" promptText="Search Name" />
+               </children>
+            </HBox>
+            <JFXComboBox fx:id="filterStatus" prefHeight="25.0" prefWidth="151.0" promptText="Filter by Status">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>

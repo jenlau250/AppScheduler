@@ -18,6 +18,8 @@ import javafx.collections.ObservableList;
  */
 public class CustomerDaoImpl {
 
+    private static String savedUser;
+
     public ObservableList<Customer> loadCustomerData() {
 
         //adding customer notes and active to this might it not work, so make sure it's exactly
@@ -53,31 +55,4 @@ public class CustomerDaoImpl {
 
     }
 
-//    public ObservableList<Customer> populateCustomerList() {
-//
-//        String tCustomerId;
-//        String tCustomerName;
-//
-//        ObservableList<Customer> customerList = FXCollections.observableArrayList();
-//        try (
-//                PreparedStatement statement = DBHandler.getConn().prepareStatement(
-//                        "SELECT customer.customerId, customer.customerName "
-//                        + "FROM customer, pet "
-//                        + "WHERE customer.petId = pet.petId "
-//                        + "ORDER BY customer.customerId"); ResultSet rs = statement.executeQuery()) {
-//
-//            while (rs.next()) {
-//                tCustomerId = rs.getString("customer.customerId");
-//                tCustomerName = rs.getString("customer.customerName");
-//                customerList.add(new Customer(tCustomerId, tCustomerName));
-//            }
-//        } catch (SQLException sqe) {
-//            sqe.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return customerList;
-//
-//    }
 }

@@ -15,15 +15,12 @@ import com.poshpaws.appscheduler.dao.DBHandler;
 import com.poshpaws.appscheduler.jCalendar;
 import com.poshpaws.appscheduler.model.Customer;
 import com.poshpaws.appscheduler.model.Pet;
-import com.poshpaws.appscheduler.model.User;
 import com.poshpaws.appscheduler.util.Loggerutil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
@@ -45,8 +42,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 
@@ -58,14 +53,6 @@ import javafx.util.StringConverter;
 public class CustomerScreenController {
 
     private jCalendar mainApp;
-    private User currentUser;
-    private Customer customer;
-
-    @FXML
-    private StackPane rootPane;
-
-    @FXML
-    private AnchorPane rootAnchorPane;
 
     @FXML
     private Label customerLabel;
@@ -102,15 +89,14 @@ public class CustomerScreenController {
     @FXML
     private JFXTextField txtCustomerName;
     @FXML
-    private JFXTextField txtCustomerPhone; //Address
+    private JFXTextField txtCustomerPhone;
     @FXML
-    private JFXTextField txtCustomerEmail; //Address2
+    private JFXTextField txtCustomerEmail;
 
     @FXML
     private JFXCheckBox checkboxActive;
-//    private JFXTextField txtCustomerStatus; //ZipCode
     @FXML
-    private JFXTextField txtCustomerNotes; //Phone
+    private JFXTextField txtCustomerNotes;
 
     @FXML
     private JFXComboBox<Pet> cbPetSelection;
@@ -142,20 +128,9 @@ public class CustomerScreenController {
     private JFXButton btnUpload;
 
     String imgPath = null;
-
     private String savedUser;
-
-    private ObservableList<Customer> customerList = FXCollections.observableArrayList();
-    private ObservableList<Pet> petList = FXCollections.observableArrayList(); //Cities
-    private ObservableList<Pet> customerPets = FXCollections.observableArrayList(); //selectedCountries
-    private ObservableList<Pet> selectedPets = FXCollections.observableArrayList(); //selectedCountries
-    private static ObservableList<String> petNames = FXCollections.observableArrayList(); //selectedCountries
     private ObservableList<Customer> selectedStatus = FXCollections.observableArrayList();
-
     private boolean editMode;
-
-    private String petImageFile;
-
     private final static Logger logger = Logger.getLogger(Loggerutil.class.getName());
 
     public CustomerScreenController() {
@@ -271,6 +246,7 @@ public class CustomerScreenController {
     void handleSaveCustomer(ActionEvent event) {
 
         Customer selectedCustomer = CustomerTable.getSelectionModel().getSelectedItem();
+
         System.out.println("Debug handleSaveCustomer: editMode: " + editMode);
 
         boolean saveSuccess = false;
@@ -283,7 +259,7 @@ public class CustomerScreenController {
         } else {
             if (validateNewCustomer()) {
                 saveSuccess = true;
-                saveNewCustomer();
+                addNewCustomer();
 
             }
         }
@@ -557,65 +533,31 @@ public class CustomerScreenController {
     /**
      * Inserts new customer record
      */
-    private void saveNewCustomer() {
-        System.out.println("Save new customer and pet..");
-        //add validation to check new pet fields are filled
-        try {
+    private void addNewCustomer() {
 
-            PreparedStatement pst = DBHandler.getConn().prepareStatement("INSERT INTO customer "
-                    + "( customerName, customerPhone, customerEmail, notes, active, createDate, createdBy, lastUpdate, lastUpdateBy) "
-                    + " VALUES ( ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)", Statement.RETURN_GENERATED_KEYS);
-            pst.setString(1, txtCustomerName.getText());
-            pst.setString(2, txtCustomerPhone.getText());
-            pst.setString(3, txtCustomerEmail.getText());
-            pst.setString(4, txtCustomerNotes.getText());
+        String name = txtCustomerName.getText();
+        String phone = txtCustomerPhone.getText();
+        String email = txtCustomerEmail.getText();
+        String notes = txtCustomerNotes.getText();
+        Boolean active = checkboxActive.isSelected();
 
-            if (checkboxActive.isSelected()) {
-                pst.setInt(5, 1);
-            } else {
-                pst.setInt(5, 0);
-            }
+        String petName = txtPetName.getText();
+        String petType = comboPetType.getValue();
+        String desc = txtPetDescription.getText();
 
-            pst.setString(6, savedUser);
-            pst.setString(7, savedUser);
+        Customer newCustomer = new Customer(name, phone, email, active, notes);
+        Pet newPet = new Pet(petName, petType, desc);
 
-            pst.executeUpdate();
-            ResultSet rs = pst.getGeneratedKeys();
-
-            int newPetId = -1;
-            int newCustomerId = -1;
-
-            if (rs.next()) {
-                newPetId = rs.getInt(1);
-                newCustomerId = rs.getInt(1);
-            }
-
-            PreparedStatement ps = DBHandler.getConn().prepareStatement("INSERT INTO pet "
-                    + "(petName, petType, petDescription, createDate, createdBy, lastUpdate, lastUpdateBy, customerId) "
-                    + " VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?, ?)");
-            ps.setString(1, txtPetName.getText());
-            ps.setString(2, comboPetType.getValue());
-            ps.setString(3, txtPetDescription.getText());
-            ps.setString(4, savedUser);
-            ps.setString(5, savedUser);
-            ps.setInt(6, newCustomerId);
-
-            ps.executeUpdate();
-
-            System.out.println("Attempting to save new record.. "
-                    + "New Customer ID" + newCustomerId + "\n"
-                    + "Name: " + txtCustomerName.getText() + "\n"
-                    + "Phone: " + txtCustomerPhone.getText() + "\n"
-                    + "Email: " + txtCustomerEmail.getText() + "\n"
-                    + "Notes: " + txtCustomerNotes.getText() + "\n"
-                    + "Status: " + checkboxActive.isSelected() + "\n"
-                    + "Pet: " + txtPetName.getText() + "\n"
-                    + "Pet Type: " + comboPetType.getValue() + "\n"
-                    + "Pet Notes: " + txtPetDescription.getText() + "\n"
-            );
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        if (DBHandler.addNewCustomer(newCustomer, newPet)) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Adding customer succeeded");
+            alert.setHeaderText("New customer and pet has been added.");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Adding customer failed");
+            alert.setHeaderText("Please check data fields and try again.");
+            alert.showAndWait();
         }
     }
 
@@ -623,94 +565,79 @@ public class CustomerScreenController {
      * Updates customer records
      */
     private void updateCustomer(Customer c) {
+
         System.out.println("Updating current customer..");
+        String name = txtCustomerName.getText();
+        String phone = txtCustomerPhone.getText();
+        String email = txtCustomerEmail.getText();
+        String notes = txtCustomerNotes.getText();
+        Boolean active = checkboxActive.isSelected();
+        String id = c.getCustomerId();
 
-        try {
+        Customer updateCustomer = new Customer(id, name, phone, email, active, notes);
 
-            PreparedStatement pst = DBHandler.getConn().prepareStatement("UPDATE customer "
-                    + "SET customerName= ?, customerPhone = ?, customerEmail=?, notes=?, active=?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ? "
-                    + "WHERE customerId = ? ");
-            pst.setString(1, txtCustomerName.getText());
-            pst.setString(2, txtCustomerPhone.getText());
-            pst.setString(3, txtCustomerEmail.getText());
-            pst.setString(4, txtCustomerNotes.getText());
-
-            if (checkboxActive.isSelected()) {
-                pst.setInt(5, 1);
-            } else {
-                pst.setInt(5, 0);
-            }
-            pst.setString(6, savedUser);
-            pst.setString(7, c.getCustomerId());
-
-            pst.executeUpdate();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        if (DBHandler.updateCustomer(updateCustomer)) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Update Succeeded");
+            alert.setHeaderText("Customer has been updated.");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Update Failed");
+            alert.setHeaderText("Please check data fields and try again.");
+            alert.showAndWait();
         }
-
     }
 
     private void addNewPet() {
-        System.out.println("Update to save new pet");
 
-        try {
-            Customer c = CustomerTable.getSelectionModel().getSelectedItem();
-            String selectedCustomerId = c.getCustomerId();
+        Customer c = CustomerTable.getSelectionModel().getSelectedItem();
+        String cusId = c.getCustomerId();
+        String name = txtPetName.getText();
+        String desc = txtPetDescription.getText();
+        String type = comboPetType.getValue();
+        String id = "-1";
 
-            PreparedStatement ps = DBHandler.getConn().prepareStatement("INSERT INTO pet "
-                    + "(petName, petType, petDescription, createDate, createdBy, lastUpdate, lastUpdateBy, customerId) "
-                    + " VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?, ?)");
-            ps.setString(1, txtPetName.getText());
-            ps.setString(2, comboPetType.getValue());
-            ps.setString(3, txtPetDescription.getText());
-            ps.setString(4, savedUser);
-            ps.setString(5, savedUser);
-            ps.setString(6, selectedCustomerId);
+        Pet newPet = new Pet(id, name, type, desc, cusId);
 
-            ps.executeUpdate();
-
-            System.out.println("Attempting to save new pet.. "
-                    + "Customer" + c.getCustomerName() + "\n"
-                    + "Pet: " + txtPetName.getText() + "\n"
-                    + "Pet Type: " + comboPetType.getValue() + "\n"
-                    + "Pet Notes: " + txtPetDescription.getText() + "\n"
-            );
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        if (DBHandler.addNewPet(newPet)) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Adding new pet succeeded");
+            alert.setHeaderText("Pet has been added.");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Adding new pet failed");
+            alert.setHeaderText("Please check data fields and try again.");
+            alert.showAndWait();
         }
+
     }
 
     /**
      * Updates pet record
      */
     private void updatePet(Pet p) {
-        System.out.println("Update pet for current customer");
+        String name = txtPetName.getText();
+        String desc = txtPetDescription.getText();
+        String type = comboPetType.getValue();
 
-        try {
+        String id = p.getPetId();
 
-            PreparedStatement pst = DBHandler.getConn().prepareStatement("UPDATE pet "
-                    + "SET petName=?, petType=?, petDescription=?, lastUpdate=CURRENT_TIMESTAMP, lastUpdateBy=? "
-                    + "WHERE petId = ? ");
-            pst.setString(1, txtPetName.getText());
-            pst.setString(2, comboPetType.getValue());
-            pst.setString(3, txtPetDescription.getText());
-            pst.setString(4, savedUser);
-            pst.setString(5, p.getPetId());
+        Pet updatePet = new Pet(id, name, type, desc);
 
-            pst.executeUpdate();
-
-            System.out.println("Attempting to update pet.. "
-                    + "Existing ID" + p.getPetId() + "\n"
-                    + "Pet: " + txtPetName.getText() + "\n"
-                    + "Pet Type: " + comboPetType.getValue() + "\n"
-                    + "Pet Notes: " + txtPetDescription.getText() + "\n"
-            );
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        if (DBHandler.updatePet(updatePet)) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Update Succeeded");
+            alert.setHeaderText("Pet has been updated.");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Update Failed");
+            alert.setHeaderText("Please check data fields and try again.");
+            alert.showAndWait();
         }
+
     }
 
     @FXML
@@ -818,24 +745,33 @@ public class CustomerScreenController {
     }
 
     private void deleteCustomer(Customer customer) {
-
-        try {
-//            PreparedStatement pst = DBHandler.getConn().prepareStatement("DELETE customer.*, pet.* from customer, pet WHERE customer.customerId = ? AND customer.customerId = pet.customerId");
-//delete pets
-            PreparedStatement pst = DBHandler.getConn().prepareStatement("DELETE from pet WHERE pet.customerId = ?");
-            pst.setString(1, customer.getCustomerId());
-            pst.executeUpdate();
-
-            PreparedStatement ps2 = DBHandler.getConn().prepareStatement("DELETE from customer WHERE customer.customerId = ?");
-            ps2.setString(1, customer.getCustomerId());
-            ps2.executeUpdate();
-
-            System.out.println("Deleted customer (and pets) for " + customer.getCustomerId() + " - " + customer.getCustomerName());
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (DBHandler.deleteCustomer(customer)) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Deleted customer succeeded");
+            alert.setHeaderText("Customer has been deleted.");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Deleting customer failed");
+            alert.setHeaderText("Please try again.");
+            alert.showAndWait();
         }
 
+    }
+
+    private void deletePet(Pet p) {
+
+        if (DBHandler.deletePet(p)) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Deleted pet succeeded");
+            alert.setHeaderText("Pet has been deleted.");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Deleting pet failed");
+            alert.setHeaderText("Please try again.");
+            alert.showAndWait();
+        }
     }
 
     private boolean validateNewCustomer() {
@@ -979,22 +915,6 @@ public class CustomerScreenController {
 
         }
         );
-    }
-
-    private void deletePet(Pet p) {
-
-        try {
-            PreparedStatement pst = DBHandler.getConn().prepareStatement("DELETE FROM images WHERE petId = ?");
-            pst.setString(1, p.getPetId());
-            pst.executeUpdate();
-
-            PreparedStatement ps2 = DBHandler.getConn().prepareStatement("DELETE FROM pet WHERE petId = ?");
-            ps2.setString(1, p.getPetId());
-            ps2.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     private boolean validatePet() {

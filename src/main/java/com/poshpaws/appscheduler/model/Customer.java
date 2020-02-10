@@ -84,6 +84,15 @@ public class Customer {
 
     }
 
+    public Customer(String name, String phone, String email, Boolean active, String notes) {
+        this.customerName.set(name);
+        this.customerPhone.set(phone);
+        this.customerEmail.set(email);
+        this.active.set(active);
+        this.notes.set(notes);
+
+    }
+
     //For Appt Table View
     public Customer(String id, String name, String phone, String email) {
         this.customerId.set(id);
