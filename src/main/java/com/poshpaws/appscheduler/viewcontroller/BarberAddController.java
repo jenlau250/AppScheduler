@@ -8,8 +8,7 @@ package com.poshpaws.appscheduler.viewcontroller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDatePicker;
-import com.poshpaws.appscheduler.cache.BarberCache;
-import com.poshpaws.appscheduler.dao.DBConnection;
+import com.poshpaws.appscheduler.dao.DBHandler;
 import com.poshpaws.appscheduler.jCalendar;
 import com.poshpaws.appscheduler.model.Barber;
 import com.poshpaws.appscheduler.model.User;
@@ -125,7 +124,7 @@ public class BarberAddController {
             } else {
                 saveNewBarber();
             }
-            BarberCache.flush();
+            mainApp.refreshView();
 
             mainApp.showBarberScreen();
         }
@@ -199,7 +198,7 @@ public class BarberAddController {
 
             java.sql.Date sqlDate = Date.valueOf(selHireDate);
 
-            PreparedStatement pst = DBConnection.getConn().prepareStatement("INSERT INTO barber "
+            PreparedStatement pst = DBHandler.getConn().prepareStatement("INSERT INTO barber "
                     + "(barberName, barberPhone, barberEmail, notes, active, hireDate, createDate, createdBy, lastUpdate, lastUpdateBy) "
                     + " VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)");
 
@@ -238,7 +237,7 @@ public class BarberAddController {
         System.out.println("attempting to update barber ID" + selectedId);
         try {
 
-            PreparedStatement ps = DBConnection.getConn().prepareStatement("UPDATE barber "
+            PreparedStatement ps = DBHandler.getConn().prepareStatement("UPDATE barber "
                     + "SET barberName = ?, barberPhone = ?, barberEmail = ?, notes = ?, active = ?, hireDate = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ?  "
                     + "WHERE barberId = " + selectedId);
 

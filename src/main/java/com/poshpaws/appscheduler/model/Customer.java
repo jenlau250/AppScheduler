@@ -22,10 +22,8 @@ public class Customer {
     private final StringProperty customerName = new SimpleStringProperty();
     private final StringProperty customerPhone = new SimpleStringProperty();
     private final StringProperty customerEmail = new SimpleStringProperty();
-//    private final StringProperty active = new SimpleStringProperty();
     private final SimpleBooleanProperty active = new SimpleBooleanProperty();
     private final StringProperty notes = new SimpleStringProperty();
-    private String count;
 
     private ObservableList<Pet> pets = FXCollections.observableArrayList();
 
@@ -95,33 +93,6 @@ public class Customer {
 
     }
 
-    public Customer(String name, String count) {
-        this.customerName.set(name);
-        this.count = count;
-    }
-
-//    public Customer(String id, String name, String phone, String email, String active, String notes, Pet pet) {
-//        this.customerId.set(id);
-//        this.customerName.set(name);
-//        this.customerPhone.set(phone);
-//        this.customerEmail.set(email);
-//        this.active.set(active);
-//        this.notes.set(notes);
-//        this.pet.set(pet);
-//
-//    }
-//
-//    //FOR TABLEVIEW
-//    public Customer(String id, String name, String phone, String email, Pet pet) {
-//        this.customerId.set(id);
-//        this.customerName.set(name);
-//        this.customerPhone.set(phone);
-//        this.customerEmail.set(email);
-////        this.active.set(active);
-////        this.notes.set(notes);
-//        this.pet.set(pet);
-//
-//    }
     public StringProperty customerPhoneProperty() {
         return this.customerPhone;
     }

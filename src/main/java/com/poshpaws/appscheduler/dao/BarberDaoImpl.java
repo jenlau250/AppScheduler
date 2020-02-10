@@ -24,7 +24,7 @@ public class BarberDaoImpl {
         ObservableList<Barber> barberList = FXCollections.observableArrayList();
 
         try {
-            PreparedStatement ps = DBConnection.getConn().prepareStatement(
+            PreparedStatement ps = DBHandler.getConn().prepareStatement(
                     "SELECT barberId, barberName, barberPhone, barberEmail, active, notes, hireDate "
                     + "FROM barber");
 

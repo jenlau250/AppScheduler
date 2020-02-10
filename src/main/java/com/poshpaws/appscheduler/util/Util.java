@@ -23,7 +23,7 @@ import javafx.util.Callback;
  *
  * @author Jen
  */
-public class DateTimeUtil {
+public class Util {
 
     private static final DateTimeFormatter TIMEFORMATTER = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
     private static final DateTimeFormatter DATEFORMATTER = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);

@@ -18,9 +18,9 @@ import java.sql.Statement;
  *
  * @author jlau2
  */
-public class DBConnection {
+public class DBHandler {
 
-    private static DBConnection handler = null;
+    private static DBHandler handler = null;
 
     private static final String databaseName = "U05NQU";
     private static final String DB_URL = "jdbc:mysql://52.206.157.109/" + databaseName;
@@ -38,22 +38,13 @@ public class DBConnection {
 
     static {
         init();
-        //create tables if not exist
     }
 
     //Constructor
-    private DBConnection() {
+    private DBHandler() {
 
-//        getConn();
-//        }
     }
 
-//    public static DBConnection getInstance() {
-//        if (handler == null) {
-//            handler = new DBConnection();
-//        }
-//        return handler;
-//    }
     public static void init() {
         try {
             Class.forName(driver).newInstance();

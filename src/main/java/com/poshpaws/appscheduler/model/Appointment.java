@@ -5,7 +5,7 @@
  */
 package com.poshpaws.appscheduler.model;
 
-import com.poshpaws.appscheduler.util.DateTimeUtil;
+import com.poshpaws.appscheduler.util.Util;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -208,7 +208,7 @@ public class Appointment {
         //Set time from 8AM to 5PM in 15 minute increments
         LocalTime appointmentStartTime = LocalTime.of(7, 0);
         while (!appointmentStartTime.equals(LocalTime.of(17, 0))) {
-            String startTime = DateTimeUtil.parseTimeToStringFormat(appointmentStartTime);
+            String startTime = Util.parseTimeToStringFormat(appointmentStartTime);
             startTimes.add(startTime);
             appointmentStartTime = appointmentStartTime.plusMinutes(15);
 
@@ -220,7 +220,7 @@ public class Appointment {
         //Set time from 7AM to 5PM in 15 minute increments
         LocalTime appointmentEndTime = LocalTime.of(7, 15);
         while (!appointmentEndTime.equals(LocalTime.of(17, 15))) {
-            String endTime = DateTimeUtil.parseTimeToStringFormat(appointmentEndTime);
+            String endTime = Util.parseTimeToStringFormat(appointmentEndTime);
             endTimes.add(endTime);
             appointmentEndTime = appointmentEndTime.plusMinutes(15);
 

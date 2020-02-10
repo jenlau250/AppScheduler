@@ -8,13 +8,10 @@ package com.poshpaws.appscheduler.viewcontroller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.events.JFXDialogEvent;
 import com.poshpaws.appscheduler.cache.CustomerCache;
 import com.poshpaws.appscheduler.cache.PetCache;
-import com.poshpaws.appscheduler.dao.DBConnection;
+import com.poshpaws.appscheduler.dao.DBHandler;
 import com.poshpaws.appscheduler.jCalendar;
 import com.poshpaws.appscheduler.model.Customer;
 import com.poshpaws.appscheduler.model.Pet;
@@ -46,10 +43,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
@@ -78,6 +73,8 @@ public class CustomerScreenController {
     private Label labelCusID;
     @FXML
     private Label petLabel;
+    @FXML
+    private Label selectPetLabel;
     @FXML
     private JFXButton btnCustomerAdd;
     @FXML
@@ -144,9 +141,6 @@ public class CustomerScreenController {
     @FXML
     private JFXButton btnUpload;
 
-    @FXML
-    private Label selectPetLabel;
-
     String imgPath = null;
 
     private String savedUser;
@@ -167,11 +161,6 @@ public class CustomerScreenController {
     public CustomerScreenController() {
 
     }
-//
-//    @FXML
-//    private void initializePetTypes() {
-//
-//    }
 
     @FXML
     private void initializeStatusCombo() {
@@ -183,13 +172,15 @@ public class CustomerScreenController {
     @FXML
     void handleAddCustomer(ActionEvent event) {
 
-//        mainApp.showCustomerPane();
         editMode = false;
         CustomerTable.setDisable(true);
-        showButtons();
+//        showButtons();
+
+        btnCustomerCancelSave.setVisible(true);
+        btnCustomerSave.setVisible(true);
 
         //Add mode, disable other buttons except Save and Cancel
-        customerLabel.setText("Add New Customer");
+        customerLabel.setText("Add New Customer and Pet");
         labelCusID.setText("Auto Generated");
         btnCustomerAdd.setDisable(true);
         btnCustomerUpdate.setDisable(true);
@@ -197,6 +188,7 @@ public class CustomerScreenController {
         checkboxActive.setSelected(true);
 
         cbPetSelection.setVisible(false);
+        selectPetLabel.setVisible(false);
 
         CustomerTable.setDisable(true);
 
@@ -233,12 +225,6 @@ public class CustomerScreenController {
                     .filter(response -> response == ButtonType.OK)
                     .ifPresent(response -> {
                         deleteCustomer(selectedCustomer);
-
-                        CustomerCache.flush();
-                        PetCache.flush();
-
-                        loadTableView();
-//                        mainApp.showCustomerScreen();
                     });
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -247,6 +233,10 @@ public class CustomerScreenController {
             alert.setContentText("Please select a customer to delete");
             alert.showAndWait();
         }
+        PetCache.flush();
+        CustomerCache.flush();
+        mainApp.showCustomerScreen();
+
     }
 
     @FXML
@@ -282,18 +272,27 @@ public class CustomerScreenController {
 
         Customer selectedCustomer = CustomerTable.getSelectionModel().getSelectedItem();
         System.out.println("Debug handleSaveCustomer: editMode: " + editMode);
-        if (validateCustomer()) {
-            if (editMode) {
-                updateCustomer(selectedCustomer);
-            } else {
-                saveNewCustomer();
-            }
-            PetCache.flush();
-            CustomerCache.flush();
-            loadTableView();
-            setDefault();
 
+        boolean saveSuccess = false;
+        if (editMode) {
+            if (validateCustomerOnly()) {
+                saveSuccess = true;
+                updateCustomer(selectedCustomer);
+            }
+
+        } else {
+            if (validateNewCustomer()) {
+                saveSuccess = true;
+                saveNewCustomer();
+
+            }
         }
+        if (saveSuccess) {
+
+            mainApp.refreshView();
+            mainApp.showCustomerScreen();
+        }
+
     }
 
     @FXML
@@ -308,7 +307,7 @@ public class CustomerScreenController {
                 updatePet(p);
 
             }
-            PetCache.flush();
+            mainApp.refreshView();
 
         }
     }
@@ -323,6 +322,8 @@ public class CustomerScreenController {
         CustomerTable.setDisable(true);
         customerLabel.setText("Update Customer Details");
 
+        txtCustomerName.requestFocus();
+
         Customer selectedCustomer = CustomerTable.getSelectionModel().getSelectedItem();
 
         if (selectedCustomer != null) {
@@ -333,22 +334,22 @@ public class CustomerScreenController {
             btnCustomerDelete.setDisable(true);
 
         } else {
-            BoxBlur blur = new BoxBlur(3, 3, 3);
-            JFXDialogLayout dialogLayout = new JFXDialogLayout();
-            JFXButton button = new JFXButton("OK");
-            button.getStyleClass().add("dialog-button");
-            JFXDialog dialog = new JFXDialog(rootPane, dialogLayout, JFXDialog.DialogTransition.CENTER);
-            button.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent mouseEvent) -> {
-                dialog.close();
-            });
-
-            dialogLayout.setHeading(new Label("No customer was selected to update."));
-            dialogLayout.setActions(button);
-            dialog.show();
-            dialog.setOnDialogClosed((JFXDialogEvent event1) -> {
-                rootAnchorPane.setEffect(null);
-            });
-            rootAnchorPane.setEffect(blur);
+//            BoxBlur blur = new BoxBlur(3, 3, 3);
+//            JFXDialogLayout dialogLayout = new JFXDialogLayout();
+//            JFXButton button = new JFXButton("OK");
+//            button.getStyleClass().add("dialog-button");
+//            JFXDialog dialog = new JFXDialog(rootPane, dialogLayout, JFXDialog.DialogTransition.CENTER);
+//            button.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent mouseEvent) -> {
+//                dialog.close();
+//            });
+//
+//            dialogLayout.setHeading(new Label("No customer was selected to update."));
+//            dialogLayout.setActions(button);
+//            dialog.show();
+//            dialog.setOnDialogClosed((JFXDialogEvent event1) -> {
+//                rootAnchorPane.setEffect(null);
+//            });
+//            rootAnchorPane.setEffect(blur);
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not selected");
             alert.setHeaderText("No customer was selected");
@@ -368,7 +369,7 @@ public class CustomerScreenController {
         this.mainApp = mainApp;
 
         initCol();
-        comboPetType.getItems().clear();
+//        comboPetType.getItems().clear();
         comboPetType.setItems(Pet.getPetTypes());
         initializeStatusCombo();
         loadTableView();
@@ -391,38 +392,7 @@ public class CustomerScreenController {
 
             }
         });
-
-//        // On selected item
-//        CustomerTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Customer>() {
-//
-//            @Override
-//            public void changed(ObservableValue<? extends Customer> observable, Customer oldValue, Customer newValue) {
-//
-//                // Create a new FXML loader
-//                FXMLLoader loader = new FXMLLoader(getClass().getResource("CustomerPane2.fxml"));
-//                try {
-//                    // Load the another FXML file
-//                    Parent newParent = loader.load();
-//                    CustomerPaneController subController = loader.getController();
-//                    // Set the String property
-//                    // If you want to use data from the current selection: newValue contains the currently selected Person
-//                    // TODO: Get value from DB
-//                    subController.textToDisplay.set("value from DB for Person" + newValue.getCustomerId());
-//
-//                    // newParent contains the root of your other FXML file, do anything that you want to do with it (e.g. add to the current node graph)
-//                    // Now I just simply open it in a new window
-//                    Stage newStage = new Stage();
-//                    Scene newScene = new Scene(newParent);
-//                    newStage.setScene(newScene);
-//                    newStage.show();
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//        });
-        //Populate pet type and description based on selected pet
+//        //Populate pet type and description based on selected pet
         cbPetSelection.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
 
@@ -431,7 +401,6 @@ public class CustomerScreenController {
 
             }
         });
-
         //Show status as either A or I
         colCustomerStatus.setCellFactory(tc -> new TableCell<Customer, Boolean>() {
             @Override
@@ -520,10 +489,13 @@ public class CustomerScreenController {
     }
 
     private void showButtons() {
-        btnCustomerCancelSave.setVisible(true);
-        btnCustomerSave.setVisible(true);
+
         btnPetSave.setVisible(true);
         btnPetDelete.setVisible(true);
+
+        btnCustomerCancelSave.setVisible(true);
+        btnCustomerSave.setVisible(true);
+
     }
 
     private void setDefault() {
@@ -532,6 +504,7 @@ public class CustomerScreenController {
         CustomerTable.setDisable(false);
         labelCusID.setText("");
         cbPetSelection.setVisible(true);
+        selectPetLabel.setVisible(true);
         btnCustomerAdd.setDisable(false);
         btnCustomerUpdate.setDisable(false);
         btnCustomerDelete.setDisable(false);
@@ -539,15 +512,14 @@ public class CustomerScreenController {
         editMode = false;
         hideButtons();
 
-        txtCustomerName.requestFocus();
     }
 
     private void hideButtons() {
+        btnPetSave.setVisible(false);
+        btnPetDelete.setVisible(false);
 
         btnCustomerCancelSave.setVisible(false);
         btnCustomerSave.setVisible(false);
-        btnPetSave.setVisible(false);
-        btnPetDelete.setVisible(false);
     }
 
     private void enableEdits() {
@@ -590,7 +562,7 @@ public class CustomerScreenController {
         //add validation to check new pet fields are filled
         try {
 
-            PreparedStatement pst = DBConnection.getConn().prepareStatement("INSERT INTO customer "
+            PreparedStatement pst = DBHandler.getConn().prepareStatement("INSERT INTO customer "
                     + "( customerName, customerPhone, customerEmail, notes, active, createDate, createdBy, lastUpdate, lastUpdateBy) "
                     + " VALUES ( ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)", Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, txtCustomerName.getText());
@@ -618,7 +590,7 @@ public class CustomerScreenController {
                 newCustomerId = rs.getInt(1);
             }
 
-            PreparedStatement ps = DBConnection.getConn().prepareStatement("INSERT INTO pet "
+            PreparedStatement ps = DBHandler.getConn().prepareStatement("INSERT INTO pet "
                     + "(petName, petType, petDescription, createDate, createdBy, lastUpdate, lastUpdateBy, customerId) "
                     + " VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?, ?)");
             ps.setString(1, txtPetName.getText());
@@ -655,7 +627,7 @@ public class CustomerScreenController {
 
         try {
 
-            PreparedStatement pst = DBConnection.getConn().prepareStatement("UPDATE customer "
+            PreparedStatement pst = DBHandler.getConn().prepareStatement("UPDATE customer "
                     + "SET customerName= ?, customerPhone = ?, customerEmail=?, notes=?, active=?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ? "
                     + "WHERE customerId = ? ");
             pst.setString(1, txtCustomerName.getText());
@@ -672,34 +644,11 @@ public class CustomerScreenController {
             pst.setString(7, c.getCustomerId());
 
             pst.executeUpdate();
-            //            System.out.println("Attempting to save new record.. "
-            //                    + "Existing Customer ID" + c.getCustomerId() + "\n"
-            //                    + "Name: " + txtCustomerName.getText() + "\n"
-            //                    + "Phone: " + txtCustomerPhone.getText() + "\n"
-            //                    + "Email: " + txtCustomerEmail.getText() + "\n"
-            //                    + "Notes: " + txtCustomerNotes.getText() + "\n"
-            //                    + "Status: " + checkboxActive.isSelected() + "\n"
 
-//            );
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
-//		ps = DBConnection.getConn().prepareStatement(insertCountryStatement);
-//		ps.setString(1, country);
-//		ps.setString(2, "CURRENT_TIMESTAMP");
-//		ps.setString(3, currentUser.getUserName());
-//		ps.setString(4, "CURRENT_TIMESTAMP");
-//		ps.setString(5, currentUser.getUserName());
-//		ps.executeUpdate();
-//
-//		countryId = getCountryId(country, currentUser);
-//	    }
-//	} catch (SQLException e) {
-//	    e.printStackTrace();
-//	}
-//	return countryId;
-//    }
     }
 
     private void addNewPet() {
@@ -709,7 +658,7 @@ public class CustomerScreenController {
             Customer c = CustomerTable.getSelectionModel().getSelectedItem();
             String selectedCustomerId = c.getCustomerId();
 
-            PreparedStatement ps = DBConnection.getConn().prepareStatement("INSERT INTO pet "
+            PreparedStatement ps = DBHandler.getConn().prepareStatement("INSERT INTO pet "
                     + "(petName, petType, petDescription, createDate, createdBy, lastUpdate, lastUpdateBy, customerId) "
                     + " VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?, ?)");
             ps.setString(1, txtPetName.getText());
@@ -741,7 +690,7 @@ public class CustomerScreenController {
 
         try {
 
-            PreparedStatement pst = DBConnection.getConn().prepareStatement("UPDATE pet "
+            PreparedStatement pst = DBHandler.getConn().prepareStatement("UPDATE pet "
                     + "SET petName=?, petType=?, petDescription=?, lastUpdate=CURRENT_TIMESTAMP, lastUpdateBy=? "
                     + "WHERE petId = ? ");
             pst.setString(1, txtPetName.getText());
@@ -795,7 +744,7 @@ public class CustomerScreenController {
 
                     if (!hasPetPhoto()) {
                         //insert new photo
-                        PreparedStatement ps = DBConnection.getConn().prepareStatement("INSERT INTO images "
+                        PreparedStatement ps = DBHandler.getConn().prepareStatement("INSERT INTO images "
                                 + "(petId, image, name, createDate, createdBy, lastUpdate, lastUpdatedBy) "
                                 + " VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?) ");
 
@@ -808,13 +757,13 @@ public class CustomerScreenController {
 
                         if (ps.executeUpdate() == 1) {
                             uploadSuccess = true;
-                            System.out.println("Added new photo " + uploadSuccess);
+
                         }
 
                     } else {
 
                         //update photo
-                        PreparedStatement ps = DBConnection.getConn().prepareStatement("UPDATE images SET image = ?, name = ?, "
+                        PreparedStatement ps = DBHandler.getConn().prepareStatement("UPDATE images SET image = ?, name = ?, "
                                 + "lastUpdate = CURRENT_TIMESTAMP, lastUpdatedBy = ? "
                                 + "WHERE petId = ?");
                         FileInputStream fs = new FileInputStream(imgPath);
@@ -825,7 +774,7 @@ public class CustomerScreenController {
                         ps.setString(4, p.getPetId());
 
                         if (ps.executeUpdate() == 1) {
-                            System.out.println("Updated photo " + uploadSuccess);
+                            uploadSuccess = true;
                         }
 
                     }
@@ -839,6 +788,9 @@ public class CustomerScreenController {
             }
 
         }
+        if (uploadSuccess) {
+            hasPetPhoto();
+        }
 
     }
 
@@ -847,7 +799,7 @@ public class CustomerScreenController {
         String query = "SELECT image FROM images WHERE petId = ?";
 
         try {
-            PreparedStatement ps = DBConnection.getConn().prepareStatement(query);
+            PreparedStatement ps = DBHandler.getConn().prepareStatement(query);
             ps.setString(1, p.getPetId());
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -868,9 +820,15 @@ public class CustomerScreenController {
     private void deleteCustomer(Customer customer) {
 
         try {
-            PreparedStatement pst = DBConnection.getConn().prepareStatement("DELETE customer.*, pet.* from customer, pet WHERE customer.customerId = ? AND customer.customerId = pet.customerId");
+//            PreparedStatement pst = DBHandler.getConn().prepareStatement("DELETE customer.*, pet.* from customer, pet WHERE customer.customerId = ? AND customer.customerId = pet.customerId");
+//delete pets
+            PreparedStatement pst = DBHandler.getConn().prepareStatement("DELETE from pet WHERE pet.customerId = ?");
             pst.setString(1, customer.getCustomerId());
             pst.executeUpdate();
+
+            PreparedStatement ps2 = DBHandler.getConn().prepareStatement("DELETE from customer WHERE customer.customerId = ?");
+            ps2.setString(1, customer.getCustomerId());
+            ps2.executeUpdate();
 
             System.out.println("Deleted customer (and pets) for " + customer.getCustomerId() + " - " + customer.getCustomerName());
 
@@ -880,18 +838,59 @@ public class CustomerScreenController {
 
     }
 
-    private boolean validateCustomer() {
+    private boolean validateNewCustomer() {
 
-        //EXCEPTION CONTROL: Validate nonexistent or invalid customer data
         String name = txtCustomerName.getText();
         String phone = txtCustomerPhone.getText();
         String email = txtCustomerEmail.getText();
-        //notes are optional
-//        String notes = txtCustomerNotes.getText();
         String petName = txtPetName.getText();
-        String petType = comboPetType.getValue();
-        //pet desc optional
-//        String petDesc = txtPetDescription.getText();
+
+        String errorMessage = "";
+
+        if (name == null || name.length() == 0) {
+            errorMessage += "Please enter customer name.\n";
+        }
+
+        if (phone == null || phone.length() == 0) {
+            errorMessage += "Please enter a phone number.\n";
+        } else if (phone.length() < 10 || phone.length() > 20) {
+            errorMessage += "Phone number must be between 10 and 20 digits.\n";
+        }
+
+        if (email == null || email.length() == 0) {
+            errorMessage += "Please enter an email address.\n";
+        }
+
+        if (petName == null || petName.length() == 0) {
+            errorMessage += "Adding new customers require a pet. Please select a pet name.\n";
+        }
+
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid data");
+            alert.setHeaderText("The following field(s) need to be fixed.");
+            alert.setContentText(errorMessage);
+
+            alert.showAndWait();
+            System.out.println("Validating "
+                    + "Name: " + txtCustomerName.getText() + "\n"
+                    + "Phone: " + txtCustomerPhone.getText() + "\n"
+                    + "Email: " + txtCustomerEmail.getText() + "\n"
+                    + "Pet: " + petName + "\n"
+            );
+
+            return false;
+        }
+    }
+
+    private boolean validateCustomerOnly() {
+
+        //Validate fields before updating existing customer details
+        String name = txtCustomerName.getText();
+        String phone = txtCustomerPhone.getText();
+        String email = txtCustomerEmail.getText();
 
         String errorMessage = "";
 
@@ -909,13 +908,6 @@ public class CustomerScreenController {
             errorMessage += "Please enter an email address.\n";
         }
 
-        if (petName == null || petName.length() == 0) {
-            errorMessage += "Please select a pet name.\n";
-        }
-        if (petType == null || petType.length() == 0) {
-            errorMessage += "Please select pet type.\n";
-        }
-
         if (errorMessage.length() == 0) {
             return true;
         } else {
@@ -925,13 +917,6 @@ public class CustomerScreenController {
             alert.setContentText(errorMessage);
 
             alert.showAndWait();
-            System.out.println("Validating "
-                    + "Name: " + txtCustomerName.getText() + "\n"
-                    + "Phone: " + txtCustomerPhone.getText() + "\n"
-                    + "Email: " + txtCustomerEmail.getText() + "\n"
-                    + "Pet: " + petName + "\n"
-                    + "Pet Type: " + comboPetType.getValue() + "\n"
-            );
 
             return false;
         }
@@ -949,7 +934,6 @@ public class CustomerScreenController {
         ObservableList<Pet> pets = PetCache.getSelectedPets(c);
         Pet p = new Pet("-1", "New Pet", "x", "x");
         pets.add(p);
-//        cbPetSelection.getItems().clear();
         cbPetSelection.setItems(pets);
         cbPetSelection.getSelectionModel().selectFirst();
 
@@ -957,23 +941,20 @@ public class CustomerScreenController {
 
     private void petSelected(Pet p) {
         //populate text fields for selected pet
-
         //hide pet name field if New Pet is selected
         if (p.getPetId().equals("-1")) {
-            comboPetType.getSelectionModel().selectFirst();
+
             txtPetName.clear();
-//            selectPetLabel.setVisible(true);
-//            txtPetName.setVisible(true);
+            comboPetType.getSelectionModel().selectFirst();
             txtPetDescription.clear();
+            petPhoto.setImage(null);
+            petLabel.setText("");
         } else {
-//            selectPetLabel.setVisible(false);
-//            txtPetName.setVisible(false);
+
             txtPetName.setText(p.getPetName());
             comboPetType.setValue(p.getPetType());
             txtPetDescription.setText(p.getPetDesc());
             //load pet image
-
-            //ISSUE, LOADING PET PHOTOS TO LIST, SLOW?
             hasPetPhoto();
         }
 
@@ -998,17 +979,18 @@ public class CustomerScreenController {
 
         }
         );
-
     }
 
     private void deletePet(Pet p) {
 
         try {
-            PreparedStatement pst = DBConnection.getConn().prepareStatement("DELETE FROM pet, images WHERE pet.petId = ?");
+            PreparedStatement pst = DBHandler.getConn().prepareStatement("DELETE FROM images WHERE petId = ?");
             pst.setString(1, p.getPetId());
             pst.executeUpdate();
 
-            System.out.println("Deleted pet " + p.getPetId() + " - " + p.getPetName());
+            PreparedStatement ps2 = DBHandler.getConn().prepareStatement("DELETE FROM pet WHERE petId = ?");
+            ps2.setString(1, p.getPetId());
+            ps2.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1017,19 +999,12 @@ public class CustomerScreenController {
 
     private boolean validatePet() {
 
-        //EXCEPTION CONTROL: Validate nonexistent or invalid customer data
         String petName = txtPetName.getText();
-        String petType = comboPetType.getValue();
-        //pet desc optional
-//        String petDesc = txtPetDescription.getText();
 
         String errorMessage = "";
 
         if (petName == null || petName.length() == 0) {
             errorMessage += "Please select a pet name.\n";
-        }
-        if (petType == null || petType.length() == 0) {
-            errorMessage += "Please select pet type.\n";
         }
 
         if (errorMessage.length() == 0) {
@@ -1041,10 +1016,6 @@ public class CustomerScreenController {
             alert.setContentText(errorMessage);
 
             alert.showAndWait();
-            System.out.println("Validating "
-                    + "Pet: " + petName + "\n"
-                    + "Pet Type: " + comboPetType.getValue() + "\n"
-            );
 
             return false;
         }

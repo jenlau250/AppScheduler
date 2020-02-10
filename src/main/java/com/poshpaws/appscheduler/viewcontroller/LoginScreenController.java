@@ -3,7 +3,7 @@ package com.poshpaws.appscheduler.viewcontroller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.poshpaws.appscheduler.dao.DBConnection;
+import com.poshpaws.appscheduler.dao.DBHandler;
 import com.poshpaws.appscheduler.jCalendar;
 import com.poshpaws.appscheduler.model.User;
 import com.poshpaws.appscheduler.util.Loggerutil;
@@ -92,7 +92,7 @@ public class LoginScreenController {
 
     User validateLogin(String username, String password) {
         try {
-            PreparedStatement ps = DBConnection.getConn().prepareStatement("SELECT * FROM user WHERE userName=? and password=?");
+            PreparedStatement ps = DBHandler.getConn().prepareStatement("SELECT * FROM user WHERE userName=? and password=?");
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();

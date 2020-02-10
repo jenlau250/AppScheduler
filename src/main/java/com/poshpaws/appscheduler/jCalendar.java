@@ -9,7 +9,6 @@ import com.poshpaws.appscheduler.cache.AppointmentCache;
 import com.poshpaws.appscheduler.cache.BarberCache;
 import com.poshpaws.appscheduler.cache.CustomerCache;
 import com.poshpaws.appscheduler.cache.PetCache;
-import com.poshpaws.appscheduler.dao.DBConnection;
 import com.poshpaws.appscheduler.model.Appointment;
 import com.poshpaws.appscheduler.model.Barber;
 import com.poshpaws.appscheduler.model.Customer;
@@ -48,17 +47,13 @@ public class jCalendar extends Application {
     private AnchorPane screen;
     @FXML
     private AnchorPane login;
-    private Stage dialogStage;
     private User currUser;
-//    private Appointment appt;
-    private Customer customer;
-    private DBConnection databasebHandler;
 
     @Override
     public void start(Stage mainStage) {
         this.mainStage = mainStage;
         this.mainStage.setTitle("Posh Paws Appointment Scheduler");
-        this.mainStage.getIcons().add(new Image("file:resources/icon.png"));
+        this.mainStage.getIcons().add(new Image("file:resources/images/icon.png"));
 
         //order is important
         BarberCache.flush();
@@ -85,11 +80,11 @@ public class jCalendar extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-//        DBConnection.init();
+//        DBHandler.init();
 
-//        connection = DBConnection.getConn();
+//        connection = DBHandler.getConn();
         launch(args);
-//        DBConnection.closeConnection();
+//        DBHandler.closeConnection();
     }
 
     /**
@@ -101,7 +96,6 @@ public class jCalendar extends Application {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(jCalendar.class.getResource("/fxml/MainScreen.fxml"));
-//            loader.setLocation(jCalendar.class.getResource("/fxml/MainScreen.fxml"));
             mainScreen = (BorderPane) loader.load();
 
             // Show the scene containing the root layout.
@@ -150,6 +144,7 @@ public class jCalendar extends Application {
             root.setPrefSize(25000, 25000);
             mainScreen.setCenter(root);
             mainScreen.setLeft(null);
+            mainScreen.setRight(null);
 
             CustomerScreenController controller = loader.getController();
             controller.setMainController(this);
@@ -172,6 +167,7 @@ public class jCalendar extends Application {
             screen.setPrefSize(25000, 25000);
             mainScreen.setCenter(screen);
             mainScreen.setLeft(null);
+            mainScreen.setRight(null);
 
             BarberScreenController controller = loader.getController();
             controller.setMainController(this);
@@ -190,6 +186,7 @@ public class jCalendar extends Application {
             screen = (AnchorPane) loader.load();
 
             mainScreen.setLeft(screen);
+            mainScreen.setRight(null);
 
             BarberAddController controller = loader.getController();
             controller.setMainController(this, currUser);
@@ -208,6 +205,7 @@ public class jCalendar extends Application {
             screen = (AnchorPane) loader.load();
 
             mainScreen.setLeft(screen);
+            mainScreen.setRight(null);
 
             BarberAddController controller = loader.getController();
             controller.setMainController(this, currUser);
@@ -217,24 +215,6 @@ public class jCalendar extends Application {
         }
     }
 
-//
-//    public void showAppointmentScreen() {
-//
-//        try {
-//
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(jCalendar.class.getResource("/fxml/AppointmentScreen.fxml"));
-//            screen = (AnchorPane) loader.load();
-//
-//            mainScreen.setCenter(screen);
-//
-//            AppointmentScreenController controller = loader.getController();
-//            controller.setMainController(this);
-//
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-//    }
     public void showReportScreen() {
 
         try {
@@ -244,6 +224,8 @@ public class jCalendar extends Application {
             screen.setMinSize(25, 25);
             screen.setPrefSize(25000, 25000);
             mainScreen.setCenter(screen);
+            mainScreen.setLeft(null);
+            mainScreen.setRight(null);
             ReportScreenController controller = loader.getController();
             controller.setMainController(this);
 
@@ -263,6 +245,7 @@ public class jCalendar extends Application {
             screen.setPrefSize(25000, 25000);
             mainScreen.setCenter(screen);
             mainScreen.setLeft(null);
+            mainScreen.setRight(null);
 
             AppointmentListController controller = loader.getController();
             controller.setMainController(this);
@@ -315,33 +298,14 @@ public class jCalendar extends Application {
         try {
 
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(jCalendar.class.getResource("/fxml/CustomerPane2.fxml"));
+            loader.setLocation(jCalendar.class.getResource("/fxml/CustomerPane.fxml"));
             screen = (AnchorPane) loader.load();
 
-            mainScreen.setBottom(screen);
+            mainScreen.setRight(screen);
 
             CustomerPaneController controller = loader.getController();
-            controller.setMainController(this, currUser);
+            controller.setMainController(this);
             controller.setSelected(selCustomer);
-//            controller.setSelectedAppointment(selectedAppt);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void showCustomerPane() {
-
-        try {
-
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(jCalendar.class.getResource("/fxml/CustomerPane2.fxml"));
-            screen = (AnchorPane) loader.load();
-
-            mainScreen.setBottom(screen);
-
-            CustomerPaneController controller = loader.getController();
-            controller.setMainController(this, currUser);
-//            controller.setSelected(selCustomer);
 //            controller.setSelectedAppointment(selectedAppt);
         } catch (IOException ex) {
             ex.printStackTrace();

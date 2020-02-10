@@ -21,22 +21,15 @@ public class Pet {
     private final StringProperty petName = new SimpleStringProperty();
     private final StringProperty petType = new SimpleStringProperty();
     private final StringProperty petDescription = new SimpleStringProperty();
-    private final StringProperty active = new SimpleStringProperty();
     private final StringProperty customerId = new SimpleStringProperty();
     private String image;
     private String count;
-//    private LocalDate lastSeen;
     private static ObservableList<String> petTypes = FXCollections.observableArrayList("Dog", "Puppy", "Cat", "Kitten", "Other");
 
     public Pet() {
 
     }
 
-//    //pet report
-//    public Pet(String name, LocalDate lastSeen) {
-//        this.petType.set(name);
-//        this.lastSeen = lastSeen;
-//    }
     //pet report
     public Pet(String type, String count) {
         this.petType.set(type);
@@ -44,12 +37,11 @@ public class Pet {
     }
 
     //FOR TABLEVIEW
-    public Pet(String id, String name, String type, String desc, String active, String customerId) {
+    public Pet(String id, String name, String type, String desc, String customerId) {
         this.petId.set(id);
         this.petName.set(name);
         this.petType.set(type);
         this.petDescription.set(desc);
-        this.active.set(active);
         this.customerId.set(customerId);
     }
 
@@ -90,10 +82,6 @@ public class Pet {
         return customerId;
     }
 
-    public StringProperty activeProperty() {
-        return active;
-    }
-
     public String getPetId() {
         return petId.get();
     }
@@ -112,10 +100,6 @@ public class Pet {
 
     public String getPetDesc() {
         return petDescription.get();
-    }
-
-    public String getActive() {
-        return active.get();
     }
 
     public void setImage(String image) {
@@ -144,22 +128,32 @@ public class Pet {
                 + "Type: " + petType + '\n'
                 + "Desc: " + petDescription + '\n';
     }
+//
+//    @Override
+//    public boolean equals(Object o) {
+//        // self check
+//        if (this == o) {
+//            return true;
+//        } else // null check
+//        if (o == null) {
+//            return false;
+//        } else // type check and cast
+//        if (getClass() != o.getClass()) {
+//            return false;
+//        } else {
+//            final Pet a = (Pet) o;
+//            // field comparison
+//            return Objects.equals(a, a);
+//        }
+//    }
 
     @Override
-    public boolean equals(Object o) {
-        // self check
-        if (this == o) {
-            return true;
-        } else // null check
-        if (o == null) {
-            return false;
-        } else // type check and cast
-        if (getClass() != o.getClass()) {
+    public boolean equals(Object object) {
+        if (object == null || !getClass().isAssignableFrom(object.getClass())) {
             return false;
         } else {
-            final Pet a = (Pet) o;
-            // field comparison
-            return Objects.equals(a, a);
+            Pet other = (Pet) object;
+            return Objects.equals(this.petId, other.petId);
         }
     }
 

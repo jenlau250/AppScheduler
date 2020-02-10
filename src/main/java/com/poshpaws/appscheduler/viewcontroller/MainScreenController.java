@@ -116,7 +116,7 @@ public class MainScreenController {
 //
 //        try {
 //
-//            PreparedStatement ps = DBConnection.getConn().prepareStatement(
+//            PreparedStatement ps = DBHandler.getConn().prepareStatement(
 //                    "SELECT appointment.appointmentId, appointment.customerId, appointment.title, appointment.description, appointment.location, "
 //                    + "appointment.`start`, appointment.`end`, customer.customerId, customer.customerName, appointment.createdBy "
 //                    + "FROM appointment, customer "

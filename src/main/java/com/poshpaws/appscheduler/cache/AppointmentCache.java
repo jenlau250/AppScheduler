@@ -7,7 +7,6 @@ package com.poshpaws.appscheduler.cache;
 
 import com.poshpaws.appscheduler.dao.AppointmentDaoImpl;
 import com.poshpaws.appscheduler.model.Appointment;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
@@ -89,24 +88,23 @@ public class AppointmentCache {
 
     }
 
-    public static ObservableList<Appointment> getBarberAppointmentByStartEndTime(int barberId, LocalDateTime start, LocalDateTime end) {
-
-        ObservableList<Appointment> returnList = FXCollections.observableArrayList();
-//use -1 trick to add All Barbers to selection
-
-        for (Appointment a : appointmentList) {
-            if (a.getBarber().getBarberId().equals(barberId)) { // if -1 or getBarber matches
-                //check start and end date overlap
-
-//                if all matches, add to list
-                returnList.add(a);
-            }
-        }
-
-        return returnList;
-
-    }
-
+//    public static ObservableList<Appointment> getBarberAppointmentByStartEndTime(int barberId, LocalDateTime start, LocalDateTime end) {
+//
+//        ObservableList<Appointment> returnList = FXCollections.observableArrayList();
+////use -1 trick to add All Barbers to selection
+//
+//        for (Appointment a : appointmentList) {
+//            if (a.getBarber().getBarberId().equals(barberId)) { // if -1 or getBarber matches
+//                //check start and end date overlap
+//
+////                if all matches, add to list
+//                returnList.add(a);
+//            }
+//        }
+//
+//        return returnList;
+//
+//    }
 //    public ObservableList<Pet> lastAppointmentforPet() {
 //        ObservableList<Pet> lastDatesforPets = FXCollections.observableArrayList();
 //        LocalDate currDate = LocalDate.now();

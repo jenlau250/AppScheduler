@@ -8,10 +8,10 @@ package com.poshpaws.appscheduler.viewcontroller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.poshpaws.appscheduler.cache.AppointmentCache;
-import com.poshpaws.appscheduler.dao.DBConnection;
+import com.poshpaws.appscheduler.dao.DBHandler;
 import com.poshpaws.appscheduler.jCalendar;
 import com.poshpaws.appscheduler.model.Appointment;
-import com.poshpaws.appscheduler.model.User;
+import com.poshpaws.appscheduler.model.Customer;
 import com.poshpaws.appscheduler.util.Loggerutil;
 import java.net.URL;
 import java.sql.PreparedStatement;
@@ -46,10 +46,8 @@ import javafx.scene.control.TableView;
 public class AppointmentListController implements Initializable {
 
     private jCalendar mainApp;
-    private User currentUser;
     private LocalDate currDate;
-//    Appointment selectedAppt;
-//    private Appointment selectedAppt;
+
     @FXML
     private TableView<Appointment> tableView;
 
@@ -76,14 +74,6 @@ public class AppointmentListController implements Initializable {
 
     @FXML
     private TableColumn<Appointment, String> colPet;
-
-//    @FXML
-//    private TableColumn<Appointment, String> colPhone;
-//
-//    @FXML
-//    private TableColumn<Appointment, String> colEmail;
-    @FXML
-    private JFXButton btnNewAdd;
 
     @FXML
     private JFXButton btnViewCustomer;
@@ -118,13 +108,6 @@ public class AppointmentListController implements Initializable {
     }
 
     @FXML
-    void handleCustomerView(ActionEvent event) {
-
-        Appointment selectedAppt = tableView.getSelectionModel().getSelectedItem();
-//        mainApp.showCustomerPane(selectetestdAppt);
-    }
-
-    @FXML
     void handleApptEdit(ActionEvent event) {
 
         Appointment selectedAppt = tableView.getSelectionModel().getSelectedItem();
@@ -134,10 +117,25 @@ public class AppointmentListController implements Initializable {
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not selected");
-//            alert.setHeaderText("No barber was selected to delete");
             alert.setContentText("Please select an existing appointment to update");
             alert.showAndWait();
         }
+    }
+
+    @FXML
+    void handleCustomerView(ActionEvent event) {
+
+        Customer selCustomer = tableView.getSelectionModel().getSelectedItem().getCustomer();
+
+        if (selCustomer != null) {
+            mainApp.showCustomerPane(selCustomer);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Not selected");
+            alert.setContentText("Please select an existing appointment to view customer details");
+            alert.showAndWait();
+        }
+
     }
 
     @FXML
@@ -174,10 +172,7 @@ public class AppointmentListController implements Initializable {
     public void setMainController(jCalendar mainApp) {
 
         this.mainApp = mainApp;
-//        this.currentUser = currentUser;
-
         appointmentList.addAll(AppointmentCache.getAllAppointments());
-
         tableView.setItems(appointmentList);
 
     }
@@ -204,8 +199,6 @@ public class AppointmentListController implements Initializable {
         colBarber.setCellValueFactory(f -> f.getValue().getBarber().nameProperty());
         colPet.setCellValueFactory(f -> f.getValue().getPet().nameProperty());
         colCusName.setCellValueFactory(f -> f.getValue().getCustomer().customerNameProperty());
-//        colPhone.setCellValueFactory(f -> f.getValue().getCustomer().customerPhoneProperty());
-//        colEmail.setCellValueFactory(f -> f.getValue().getCustomer().customerEmailProperty());
 
         colStart.setCellFactory(column -> new TableCell<Appointment, LocalDateTime>() {
             @Override
@@ -238,9 +231,6 @@ public class AppointmentListController implements Initializable {
         labelEndBound.setText(null);
 
         currDate = LocalDate.now();
-//        nextMonth(currDate);
-
-        //first filter list - getAppointments by barber - get all or by ID, THEN use that filtered list for date selection below..
         // Add monthly or weekly filter to tableview
         comboWeekMonth.setItems(FXCollections.observableArrayList("Daily", "Weekly", "Monthly"));
 
@@ -286,7 +276,7 @@ public class AppointmentListController implements Initializable {
     }
 
     private void nextMonth(LocalDate cbStartDate) {
-        // Lambda expression used to filter data
+
         currDate = currDate.plusMonths(1);
         FilteredList<Appointment> filteredData = new FilteredList<>(appointmentList);
         filteredData.setPredicate(row -> {
@@ -364,7 +354,7 @@ public class AppointmentListController implements Initializable {
     private void deleteAppointment(Appointment a) {
 
         try {
-            PreparedStatement pst = DBConnection.getConn().prepareStatement(
+            PreparedStatement pst = DBHandler.getConn().prepareStatement(
                     "DELETE FROM appointment WHERE appointmentId = ?");
             pst.setString(1, a.getAppointmentId());
             pst.executeUpdate();
@@ -372,7 +362,7 @@ public class AppointmentListController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-//        mainApp.refreshView();
+
         AppointmentCache.flush();
 
     }

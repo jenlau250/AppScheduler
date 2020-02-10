@@ -19,14 +19,6 @@ public class PetCache {
 
     private static ObservableList<Pet> petList = FXCollections.observableArrayList();
 
-    private static ObservableList<String> petTypes = FXCollections.observableArrayList();
-
-    public static ObservableList<String> getPetTypes() {
-        petTypes.addAll("Dog", "Puppy", "Cat", "Kitten", "Other");
-
-        return petTypes;
-    }
-
     public static ObservableList<Pet> getAllPets() {
         ObservableList<Pet> returnList = FXCollections.observableArrayList();
         returnList.addAll(petList);
@@ -36,16 +28,6 @@ public class PetCache {
     public static Pet getPet(String petId) {
         for (Pet p : petList) {
             if (p.getPetId().equals(petId)) {
-                return p;
-            }
-        }
-        return null;
-    }
-
-    //want to add this to Customer's Pets List
-    public static Pet getPetsByCustomerId(String customerId) {
-        for (Pet p : petList) {
-            if (p.getCustomerId().equals(customerId)) {
                 return p;
             }
         }
@@ -70,13 +52,4 @@ public class PetCache {
 
     }
 
-    public static ObservableList<Pet> getSelectedPets(String customerId) {
-        ObservableList<Pet> returnList = FXCollections.observableArrayList();
-        for (Pet p : petList) {
-            if (p.getCustomerId().equals(customerId)) {
-                returnList.addAll(p);
-            }
-        }
-        return returnList;
-    }
 }

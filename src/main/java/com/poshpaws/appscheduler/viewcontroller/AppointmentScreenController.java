@@ -8,7 +8,7 @@ package com.poshpaws.appscheduler.viewcontroller;
 //package jCalendar.viewcontroller;
 //
 //import jCalendar.dao.AppointmentDaoImpl;
-//import jCalendar.dao.DBConnection;
+//import jCalendar.dao.DBHandler;
 //import jCalendar.jCalendar;
 //import jCalendar.model.Appointment;
 //import jCalendar.model.Customer;
@@ -470,7 +470,7 @@ package com.poshpaws.appscheduler.viewcontroller;
 ////
 ////        ObservableList<Customer> customerList = FXCollections.observableArrayList();
 ////        try (
-////                 PreparedStatement statement = DBConnection.getConn().prepareStatement(
+////                 PreparedStatement statement = DBHandler.getConn().prepareStatement(
 ////                        "SELECT customer.customerId, customer.customerName "
 ////                        + "FROM customer, pet "
 ////                        + "WHERE customer.petId = pet.petId");  ResultSet rs = statement.executeQuery();) {
@@ -516,7 +516,7 @@ package com.poshpaws.appscheduler.viewcontroller;
 ////    public void populateAppointments() {
 //////*need to add barberId
 ////        try {
-////            PreparedStatement ps = DBConnection.getConn().prepareStatement(
+////            PreparedStatement ps = DBHandler.getConn().prepareStatement(
 ////                      "SELECT appointment.appointmentId, "
 ////                    + "appointment.customerId, "
 ////                    + "appointment.title, "
@@ -587,7 +587,7 @@ package com.poshpaws.appscheduler.viewcontroller;
 //
 //    private void deleteAppointment(Appointment appointment) {
 //        try {
-//            PreparedStatement pst = DBConnection.getConn().prepareStatement("DELETE appointment.* FROM appointment WHERE appointment.appointmentId = ?");
+//            PreparedStatement pst = DBHandler.getConn().prepareStatement("DELETE appointment.* FROM appointment WHERE appointment.appointmentId = ?");
 //            pst.setInt(1, appointment.getAppointmentId());
 //            pst.executeUpdate();
 //
@@ -621,7 +621,7 @@ package com.poshpaws.appscheduler.viewcontroller;
 //
 //        try {
 //
-//            PreparedStatement pst = DBConnection.getConn().prepareStatement("UPDATE appointment "
+//            PreparedStatement pst = DBHandler.getConn().prepareStatement("UPDATE appointment "
 //                    + "SET customerId = ?, title = ?, type = ?, location = ?, start = ?, end = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ? "
 //                    + "WHERE appointmentId = ?");
 //
@@ -661,7 +661,7 @@ package com.poshpaws.appscheduler.viewcontroller;
 //    public static Boolean validateApptOverlap(ZonedDateTime sDate, ZonedDateTime eDate, User user) {
 //        Boolean overlap = false;
 //        try {
-//            PreparedStatement ps = DBConnection.getConn().prepareStatement(
+//            PreparedStatement ps = DBHandler.getConn().prepareStatement(
 //                    "SELECT * FROM appointment "
 //                    + "WHERE (? BETWEEN start AND end OR ? BETWEEN start AND end OR ? < start AND ? > end) "
 //                    + "AND (createdBy = ?)"
@@ -711,7 +711,7 @@ package com.poshpaws.appscheduler.viewcontroller;
 //
 //        try {
 //
-//            PreparedStatement ps = DBConnection.getConn().prepareStatement("INSERT INTO appointment "
+//            PreparedStatement ps = DBHandler.getConn().prepareStatement("INSERT INTO appointment "
 //                    + "(customerId, title, type, location, month, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy)"
 //                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)");
 //

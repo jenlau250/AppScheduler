@@ -80,9 +80,9 @@
                               <Insets />
                            </VBox.margin>
                         </Separator>
-                        <HBox>
+                        <HBox VBox.vgrow="ALWAYS">
                            <children>
-                              <VBox>
+                              <VBox prefWidth="350.0" spacing="10.0" HBox.hgrow="ALWAYS">
                                  <children>
                                     <Label fx:id="customerLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="subtitle" text="Customer Details">
                                        <font>
@@ -92,8 +92,9 @@
                                     <GridPane hgap="5.0" prefHeight="200.0" prefWidth="374.0">
                                       <columnConstraints>
                                           <ColumnConstraints />
-                                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="94.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.0" minWidth="10.0" prefWidth="111.0" />
+                                          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="32.0" />
+                                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="61.0" />
+                                        <ColumnConstraints hgrow="ALWAYS" maxWidth="150.0" minWidth="10.0" prefWidth="125.0" />
                                           <ColumnConstraints hgrow="SOMETIMES" maxWidth="92.0" minWidth="10.0" prefWidth="58.0" />
                                       </columnConstraints>
                                       <rowConstraints>
@@ -105,49 +106,49 @@
                                           <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <JFXTextField fx:id="txtCustomerEmail" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                          <JFXTextField fx:id="txtCustomerName" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                          <JFXTextField fx:id="txtCustomerPhone" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                          <JFXTextField fx:id="txtCustomerNotes" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                                          <Label contentDisplay="TOP" text="ID" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
-                                             <padding>
-                                                <Insets right="10.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label contentDisplay="TOP" text="Name*" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-                                             <padding>
-                                                <Insets right="10.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label contentDisplay="TOP" text="Phone*" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
-                                             <padding>
-                                                <Insets right="10.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label contentDisplay="TOP" text="Email" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
-                                             <padding>
-                                                <Insets right="10.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label contentDisplay="TOP" text="Notes" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
-                                             <padding>
-                                                <Insets right="10.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label contentDisplay="TOP" text="Status" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
-                                             <padding>
-                                                <Insets right="10.0" />
-                                             </padding>
-                                          </Label>
-                                          <Label fx:id="labelCusID" text="Label" GridPane.columnIndex="2" />
-                                          <JFXCheckBox fx:id="checkboxActive" text="Active" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                                          <JFXTextField fx:id="txtCustomerName" prefHeight="25.0" prefWidth="158.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                          <JFXTextField fx:id="txtCustomerPhone" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                          <JFXTextField fx:id="txtCustomerEmail" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                          <JFXTextField fx:id="txtCustomerNotes" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                                          <JFXCheckBox fx:id="checkboxActive" contentDisplay="CENTER" text="Active" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="5" GridPane.valignment="BOTTOM">
                                              <GridPane.margin>
                                                 <Insets left="5.0" />
                                              </GridPane.margin>
                                           </JFXCheckBox>
+                                          <Label contentDisplay="TOP" text="ID:" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
+                                             <padding>
+                                                <Insets right="10.0" />
+                                             </padding>
+                                          </Label>
+                                          <Label contentDisplay="TOP" text="Name:" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                                             <padding>
+                                                <Insets right="10.0" />
+                                             </padding>
+                                          </Label>
+                                          <Label contentDisplay="TOP" text="Phone:" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+                                             <padding>
+                                                <Insets right="10.0" />
+                                             </padding>
+                                          </Label>
+                                          <Label contentDisplay="TOP" text="Email:" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
+                                             <padding>
+                                                <Insets right="10.0" />
+                                             </padding>
+                                          </Label>
+                                          <Label contentDisplay="TOP" text="Notes:" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+                                             <padding>
+                                                <Insets right="10.0" />
+                                             </padding>
+                                          </Label>
+                                          <Label contentDisplay="TOP" text="Status:" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="5" GridPane.valignment="BOTTOM">
+                                             <padding>
+                                                <Insets right="10.0" />
+                                             </padding>
+                                          </Label>
+                                          <Label fx:id="labelCusID" text="Label" GridPane.columnIndex="3" />
                                        </children>
                                     </GridPane>
-                                    <HBox alignment="CENTER" prefHeight="112.0" prefWidth="393.0">
+                                    <HBox alignment="CENTER" prefHeight="112.0" prefWidth="393.0" VBox.vgrow="ALWAYS">
                                        <children>
                                           <JFXButton fx:id="btnCustomerSave" alignment="CENTER" buttonType="RAISED" contentDisplay="BOTTOM" mnemonicParsing="false" onAction="#handleSaveCustomer" prefWidth="80.0" styleClass="normalButton" text="Save" textAlignment="CENTER" />
                                           <Pane prefHeight="73.0" prefWidth="40.0">
@@ -160,19 +161,19 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <Pane prefHeight="276.0" prefWidth="15.0" style="-fx-background-color: white;" />
-                              <VBox HBox.hgrow="ALWAYS">
+                              <Separator orientation="VERTICAL" prefHeight="200.0" />
+                              <VBox prefWidth="322.0" spacing="10.0" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Label fx:id="customerLabel1" alignment="CENTER" contentDisplay="CENTER" styleClass="subtitle" text="Pet Details">
+                                    <Label fx:id="cPetLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="subtitle" text="Pet Details">
                                        <font>
                                           <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Label>
                                     <GridPane prefHeight="195.0" prefWidth="202.0">
                                        <columnConstraints>
-                                          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="233.0" minWidth="10.0" prefWidth="96.0" />
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="448.0" minWidth="10.0" prefWidth="159.0" />
-                                          <ColumnConstraints hgrow="ALWAYS" maxWidth="436.0" minWidth="10.0" prefWidth="130.0" />
+                                          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="233.0" minWidth="10.0" prefWidth="75.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.0" minWidth="10.0" prefWidth="136.0" />
+                                          <ColumnConstraints hgrow="ALWAYS" maxWidth="436.0" minWidth="0.0" prefWidth="17.0" />
                                        </columnConstraints>
                                        <rowConstraints>
                                           <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
@@ -184,56 +185,70 @@
                                           <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
-                                          <Label fx:id="selectPetLabel" contentDisplay="TOP" prefHeight="17.0" prefWidth="63.0" text="Pet Name" GridPane.rowIndex="2">
-                                             <padding>
-                                                <Insets right="10.0" />
-                                             </padding>
-                                          </Label>
+                                          <JFXComboBox fx:id="cbPetSelection" prefHeight="25.0" prefWidth="141.0" GridPane.columnIndex="1" GridPane.valignment="BOTTOM" />
+                                          <JFXTextField fx:id="txtPetName" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                           <JFXComboBox fx:id="comboPetType" prefHeight="25.0" prefWidth="167.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                           <JFXTextField fx:id="txtPetDescription" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                          <Label contentDisplay="TOP" text="Pet Type" GridPane.rowIndex="3">
+                                          <Label contentDisplay="TOP" prefHeight="17.0" prefWidth="63.0" text="Name:" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
                                              <padding>
                                                 <Insets right="10.0" />
                                              </padding>
                                           </Label>
-                                          <Label contentDisplay="TOP" text="Notes" GridPane.rowIndex="4">
+                                          <Label contentDisplay="TOP" text="Pet Type:" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
                                              <padding>
                                                 <Insets right="10.0" />
                                              </padding>
                                           </Label>
-                                          <JFXComboBox fx:id="cbPetSelection" prefHeight="25.0" prefWidth="141.0" GridPane.columnIndex="1" />
-                                          <JFXTextField fx:id="txtPetName" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                          <Label contentDisplay="TOP" prefHeight="22.0" prefWidth="62.0" text="Select Pet">
+                                          <Label contentDisplay="TOP" text="Notes:" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+                                             <padding>
+                                                <Insets right="10.0" />
+                                             </padding>
+                                          </Label>
+                                          <Label fx:id="selectPetLabel" contentDisplay="TOP" prefHeight="22.0" prefWidth="71.0" text="Select Pet:" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
                                              <padding>
                                                 <Insets right="10.0" />
                                              </padding>
                                           </Label>
                                        </children>
                                     </GridPane>
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="393.0" spacing="20.0">
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="393.0" spacing="20.0" VBox.vgrow="ALWAYS">
                                        <children>
                                           <JFXButton fx:id="btnPetSave" alignment="CENTER" buttonType="RAISED" contentDisplay="BOTTOM" mnemonicParsing="false" onAction="#handleSavePet" prefWidth="120.0" style="-fx-background-color: darkgray;" styleClass="normalButton" text="Save Pet" textAlignment="CENTER" />
                                           <JFXButton fx:id="btnPetDelete" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleDeletePet" prefWidth="120.0" style="-fx-background-color: darkgray;" styleClass="normalButton" text="Delete Pet" />
                                        </children>
                                     </HBox>
                                  </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
                               </VBox>
-                              <Pane prefHeight="276.0" prefWidth="10.0" style="-fx-background-color: white;" />
-                              <VBox alignment="CENTER">
+                              <Separator orientation="VERTICAL" prefHeight="200.0" />
+                              <VBox alignment="CENTER" prefWidth="350.0" HBox.hgrow="ALWAYS">
                                  <children>
                                     <Label contentDisplay="TOP" styleClass="subtitle" text="Pet Photo">
                                        <padding>
                                           <Insets right="10.0" />
                                        </padding>
                                     </Label>
-                                    <ImageView fx:id="petPhoto" fitHeight="193.0" fitWidth="283.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="petPhoto" fitHeight="226.0" fitWidth="283.0" pickOnBounds="true" preserveRatio="true" />
                                     <Label fx:id="petLabel" text="Label" />
-                                    <HBox alignment="CENTER" prefHeight="331.0" prefWidth="132.0">
+                                    <HBox alignment="TOP_CENTER" prefHeight="331.0" prefWidth="132.0">
                                        <children>
-                                          <JFXButton fx:id="btnUpload" alignment="CENTER" onAction="#handleUploadPhoto" styleClass="normalButton" text="Upload Pet Photo" />
+                                          <JFXButton fx:id="btnUpload" onAction="#handleUploadPhoto" text="Upload">
+                                             <graphic>
+                                                <ImageView fitHeight="21.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../images/upload%20(1).png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                          </JFXButton>
                                        </children>
                                     </HBox>
                                  </children>
+                                 <padding>
+                                    <Insets right="20.0" />
+                                 </padding>
                               </VBox>
                            </children>
                         </HBox>

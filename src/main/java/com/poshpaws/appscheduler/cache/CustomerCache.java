@@ -59,10 +59,6 @@ public class CustomerCache {
         return null;
     }
 
-    //        PetDaoImpl petDb = new PetDaoImpl();
-//        for (Customer c : customerData) {
-//            c.getPets().addAll(petDb.getPetsByCustomer(c.getCustomerId()));
-//
     public static void flush() {
         customerList.clear();
 
@@ -70,14 +66,4 @@ public class CustomerCache {
 
     }
 
-    public static void loadPets(String customerId) {
-
-        for (Customer c : customerList) {
-            if (c.getCustomerId().equals(customerId)) {
-                c.getPets().add(PetCache.getPetsByCustomerId(customerId));
-            }
-
-            System.out.println("Testing loadPets() " + c.getPets());
-        }
-    }
 }

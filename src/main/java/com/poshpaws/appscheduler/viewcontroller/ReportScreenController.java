@@ -9,7 +9,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.poshpaws.appscheduler.cache.AppointmentCache;
 import com.poshpaws.appscheduler.cache.BarberCache;
-import com.poshpaws.appscheduler.dao.DBConnection;
+import com.poshpaws.appscheduler.dao.DBHandler;
 import com.poshpaws.appscheduler.jCalendar;
 import com.poshpaws.appscheduler.model.Appointment;
 import com.poshpaws.appscheduler.model.Barber;
@@ -193,7 +193,7 @@ public class ReportScreenController {
         monthSet = FXCollections.observableSet();
         try {
 
-            PreparedStatement statement = DBConnection.getConn().prepareStatement(
+            PreparedStatement statement = DBHandler.getConn().prepareStatement(
                     "SELECT MONTHNAME(`start`) AS \"month\", barberId, type AS \"type\", COUNT(*) as \"count\" "
                     + "FROM appointment "
                     + "GROUP BY MONTHNAME(`start`), barberId, type "

@@ -19,7 +19,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.List;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,11 +29,6 @@ import javafx.collections.ObservableList;
  */
 public class AppointmentDaoImpl {
 
-//    private DataSource ds;
-//
-//    public AppointmentDaoImpl(DataSource ds) {
-//        this.ds = ds;
-//    }
     private static final DateTimeFormatter dateformat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
 
     private final static Logger logger = Logger.getLogger(Loggerutil.class.getName());
@@ -44,9 +38,8 @@ public class AppointmentDaoImpl {
         ObservableList<Appointment> apptList = FXCollections.observableArrayList();
 
         try {
-//            Connection c = ds.getConnection();
-            DBConnection.init();
-            PreparedStatement ps = DBConnection.getConn().prepareStatement(
+            DBHandler.init();
+            PreparedStatement ps = DBHandler.getConn().prepareStatement(
                     "SELECT * FROM appointment, barber, customer, pet "
                     + "WHERE appointment.barberId = barber.barberId "
                     + "AND appointment.customerId = customer.customerId "
@@ -70,30 +63,15 @@ public class AppointmentDaoImpl {
                 apptList.add(new Appointment(appointmentId, startDate.toLocalDateTime().toLocalDate(), start.toLocalDateTime(), end.toLocalDateTime(), desc, type, barber, customer, pet));
 
             }
-            DBConnection.closeConnection();
-//            c.close()
+            DBHandler.closeConnection();
 
         } catch (SQLException e) {
-//            throw new DataAccessException(e) //            System.out.println("Check SQL Exception with add Appointments 2");
             e.printStackTrace();
         } catch (Exception e) {
             System.out.println("Check Exception");
         }
         return apptList;
 
-    }
-
-    public Appointment findbyId(String id) {
-        throw new UnsupportedOperationException();
-    }
-
-    public List getAppointmentsByTimeAndBarber(String sDate, String eDate, Barber b) {
-        throw new UnsupportedOperationException();
-
-    }
-
-    public List getAppointmentTimesforBarber(String barberId) {
-        throw new UnsupportedOperationException();
     }
 
 }

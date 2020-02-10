@@ -9,7 +9,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.poshpaws.appscheduler.cache.BarberCache;
-import com.poshpaws.appscheduler.dao.DBConnection;
+import com.poshpaws.appscheduler.dao.DBHandler;
 import com.poshpaws.appscheduler.jCalendar;
 import com.poshpaws.appscheduler.model.Barber;
 import com.poshpaws.appscheduler.model.User;
@@ -260,7 +260,7 @@ public class BarberScreenController {
     private void deleteBarber(Barber selectedBarber) {
 
         try {
-            PreparedStatement pst = DBConnection.getConn().prepareStatement(
+            PreparedStatement pst = DBHandler.getConn().prepareStatement(
                     "DELETE FROM barber WHERE barberId = ?");
             pst.setString(1, selectedBarber.getBarberId());
             pst.executeUpdate();

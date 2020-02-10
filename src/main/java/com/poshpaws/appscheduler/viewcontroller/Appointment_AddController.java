@@ -14,13 +14,13 @@ import com.poshpaws.appscheduler.cache.AppointmentCache;
 import com.poshpaws.appscheduler.cache.BarberCache;
 import com.poshpaws.appscheduler.cache.CustomerCache;
 import com.poshpaws.appscheduler.cache.PetCache;
-import com.poshpaws.appscheduler.dao.DBConnection;
+import com.poshpaws.appscheduler.dao.DBHandler;
 import com.poshpaws.appscheduler.jCalendar;
 import com.poshpaws.appscheduler.model.Appointment;
 import com.poshpaws.appscheduler.model.Barber;
 import com.poshpaws.appscheduler.model.Customer;
 import com.poshpaws.appscheduler.model.Pet;
-import com.poshpaws.appscheduler.util.DateTimeUtil;
+import com.poshpaws.appscheduler.util.Util;
 import com.poshpaws.appscheduler.util.Loggerutil;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,8 +38,6 @@ import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -56,8 +54,6 @@ import javafx.util.StringConverter;
  */
 public class Appointment_AddController {
 
-    // Controllers
-//    private AppointmentScreenController mainController;
     private jCalendar mainApp;
     private String savedUser;
     private Appointment selectedAppt;
@@ -126,9 +122,6 @@ public class Appointment_AddController {
 
     private final static Logger logger = Logger.getLogger(Loggerutil.class.getName());
 
-    private ObservableList<Appointment> data;
-    private ObservableList<Pet> selectedPets = FXCollections.observableArrayList();
-    private ObservableList<Customer> customers = FXCollections.observableArrayList();
     private AppointmentCache cache;
 
     public Appointment_AddController() {
@@ -217,8 +210,8 @@ public class Appointment_AddController {
         datePicker.setValue(appt.getStartDate());
 
         //convert local time to string
-        String startTime = DateTimeUtil.parseTimeToStringFormat(appt.getStart().toLocalTime());
-        String endTime = DateTimeUtil.parseTimeToStringFormat(appt.getEnd().toLocalTime());
+        String startTime = Util.parseTimeToStringFormat(appt.getStart().toLocalTime());
+        String endTime = Util.parseTimeToStringFormat(appt.getEnd().toLocalTime());
         comboStart.setValue(startTime);
         comboEnd.setValue(endTime);
         System.out.println(appt.getEnd().toLocalTime().toString());
@@ -227,8 +220,6 @@ public class Appointment_AddController {
         comboBarber.setValue(appt.getBarber());
         comboExistCustomer.setValue(appt.getCustomer());
 
-        //Update Pet Observable List based on selected appt
-//        comboExistPet.setValue(appt.getPet());
     }
 
     private void initNewFields() {
@@ -237,9 +228,8 @@ public class Appointment_AddController {
         comboEnd.getItems().clear();
         comboStart.setItems(Appointment.getDefaultStartTimes());
         comboEnd.setItems(Appointment.getDefaultEndTimes());
-        //Get Appointment Type options
         comboType.setItems(Appointment.getApptTypes());
-//Only show ACTIVE barbers when adding new appontments
+        //Only show active barbers when adding new appontments
         comboBarber.setItems(BarberCache.getAllActiveBarbers());
         comboExistCustomer.setItems(CustomerCache.getAllActiveCustomers());
     }
@@ -253,10 +243,6 @@ public class Appointment_AddController {
     @FXML
     void handleApptSave(ActionEvent event) {
 
-//        System.out.println("printing local time " + startTime + " to " + endTime + "\n");
-//        System.out.println("printing zoned time " + startUTC + " to " + endUTC + "\n");
-//        System.out.println("printing sql time " + startsql + " to " + endsql + "\n");
-//        System.out.println("printing string sql time " + stringStart + " to " + stringEnd + "\n");
         if (validateAppt()) {
 
             //Get Fields
@@ -265,8 +251,8 @@ public class Appointment_AddController {
             String endTime = comboEnd.getSelectionModel().getSelectedItem();
 
             //Convert String times to LocalTime
-            LocalTime localStart = DateTimeUtil.parseStringToTimeFormat(startTime);
-            LocalTime localEnd = DateTimeUtil.parseStringToTimeFormat(endTime);
+            LocalTime localStart = Util.parseStringToTimeFormat(startTime);
+            LocalTime localEnd = Util.parseStringToTimeFormat(endTime);
 
             //Convert to LocalDateTime
             LocalDateTime ldtStart = LocalDateTime.of(localDate, localStart);
@@ -315,6 +301,8 @@ public class Appointment_AddController {
                 }
 
                 //Return to list
+                mainApp.refreshView();
+
                 mainApp.showAppointmentListScreen();
             }
 
@@ -350,7 +338,7 @@ public class Appointment_AddController {
                 try {
 
                     //INSERT NEW CUSTOMER RECORD
-                    PreparedStatement ps = DBConnection.getConn().prepareStatement("INSERT INTO customer "
+                    PreparedStatement ps = DBHandler.getConn().prepareStatement("INSERT INTO customer "
                             + "( customerName, customerPhone, createDate, createdBy, lastUpdate, lastUpdateBy) "
                             + " VALUES ( ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)", Statement.RETURN_GENERATED_KEYS);
                     ps.setString(1, txtNewCustomer.getText());
@@ -366,7 +354,7 @@ public class Appointment_AddController {
                     }
 
                     //INSERT NEW PET RECORD
-                    PreparedStatement ps2 = DBConnection.getConn().prepareStatement("INSERT INTO pet "
+                    PreparedStatement ps2 = DBHandler.getConn().prepareStatement("INSERT INTO pet "
                             + "(petName, petType, petDescription, createDate, createdBy, lastUpdate, lastUpdateBy, customerId) "
                             + " VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                     ps2.setString(1, txtNewPet.getText());
@@ -384,7 +372,7 @@ public class Appointment_AddController {
                     }
 
                     //UPDATE NEW APPT WITH NEW CUSTOMER/PET
-                    PreparedStatement pst = DBConnection.getConn().prepareStatement("UPDATE appointment "
+                    PreparedStatement pst = DBHandler.getConn().prepareStatement("UPDATE appointment "
                             + "SET customerId = ?, barberId = ?, petId = ?, start= ?, end = ?, description = ?, type = ?, lastUpdate= CURRENT_TIMESTAMP, lastUpdateBy = ? "
                             + "WHERE appointmentId = ? ");
 
@@ -422,7 +410,7 @@ public class Appointment_AddController {
             //update appt for existing pet/customer
             try {
 
-                PreparedStatement ps4 = DBConnection.getConn().prepareStatement("UPDATE appointment "
+                PreparedStatement ps4 = DBHandler.getConn().prepareStatement("UPDATE appointment "
                         + "SET customerId = ?, barberId = ?, petId = ?, start= ?, end = ?, description = ?, type = ?, lastUpdate= CURRENT_TIMESTAMP, lastUpdateBy = ? "
                         + "WHERE appointmentId = ?");
 
@@ -480,7 +468,7 @@ public class Appointment_AddController {
             try {
 
                 //INSERT NEW CUSTOMER RECORD
-                PreparedStatement ps = DBConnection.getConn().prepareStatement("INSERT INTO customer "
+                PreparedStatement ps = DBHandler.getConn().prepareStatement("INSERT INTO customer "
                         + "( customerName, customerPhone, createDate, createdBy, lastUpdate, lastUpdateBy) "
                         + " VALUES ( ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, txtNewCustomer.getText());
@@ -496,7 +484,7 @@ public class Appointment_AddController {
                 }
 
                 //INSERT NEW PET RECORD
-                PreparedStatement ps2 = DBConnection.getConn().prepareStatement("INSERT INTO pet "
+                PreparedStatement ps2 = DBHandler.getConn().prepareStatement("INSERT INTO pet "
                         + "(petName, petType, petDescription, createDate, createdBy, lastUpdate, lastUpdateBy, customerId) "
                         + " VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                 ps2.setString(1, txtNewPet.getText());
@@ -514,7 +502,7 @@ public class Appointment_AddController {
                 }
 
                 //INSERT NEW APPT WITH NEW CUSTOMER/PET
-                PreparedStatement pst = DBConnection.getConn().prepareStatement("INSERT INTO appointment "
+                PreparedStatement pst = DBHandler.getConn().prepareStatement("INSERT INTO appointment "
                         + "(customerId, barberId, petId, start, end, description, type, createDate, createdBy, lastUpdate, lastUpdateBy)"
                         + "VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)");
 
@@ -552,7 +540,7 @@ public class Appointment_AddController {
         } else if (!choiceNewCustomer.isSelected()) {
             //INSERT NEW APPT WITH NEW CUSTOMER/PET
             try {
-                PreparedStatement pst = DBConnection.getConn().prepareStatement("INSERT INTO appointment "
+                PreparedStatement pst = DBHandler.getConn().prepareStatement("INSERT INTO appointment "
                         + "(customerId, barberId, petId, start, end, description, type, createDate, createdBy, lastUpdate, lastUpdateBy)"
                         + "VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)");
 
@@ -750,7 +738,7 @@ public class Appointment_AddController {
 //        System.out.println("Timestamp " + sDate.toLocalDateTime());
 //Appointment start and end time can't overlap for same barber
         try {
-            PreparedStatement ps = DBConnection.getConn().prepareStatement(
+            PreparedStatement ps = DBHandler.getConn().prepareStatement(
                     "SELECT * FROM appointment "
                     + "WHERE (? BETWEEN start AND end AND barberId = ? "
                     + "OR ? BETWEEN start AND end AND barberId = ? "
