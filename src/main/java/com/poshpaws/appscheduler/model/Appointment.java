@@ -9,6 +9,7 @@ import com.poshpaws.appscheduler.util.Util;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Objects;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -242,4 +243,18 @@ public class Appointment {
                 + "Pet: " + getPet().getPetId() + " - " + getPet().getPetName() + '\n';
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (object == null || !getClass().isAssignableFrom(object.getClass())) {
+            return false;
+        } else {
+            Appointment other = (Appointment) object;
+            return Objects.equals(this.appointmentId, other.appointmentId);
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(appointmentId.get(), description.get());
+    }
 }

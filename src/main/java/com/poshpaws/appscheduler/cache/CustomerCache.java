@@ -5,7 +5,7 @@
  */
 package com.poshpaws.appscheduler.cache;
 
-import com.poshpaws.appscheduler.dao.CustomerDaoImpl;
+import com.poshpaws.appscheduler.dao.DBLoader;
 import com.poshpaws.appscheduler.model.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -62,7 +62,7 @@ public class CustomerCache {
     public static void flush() {
         customerList.clear();
 
-        customerList.addAll(new CustomerDaoImpl().loadCustomerData());
+        customerList.addAll(new DBLoader().loadCustomerData());
 
     }
 

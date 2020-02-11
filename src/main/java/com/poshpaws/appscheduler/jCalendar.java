@@ -53,9 +53,8 @@ public class jCalendar extends Application {
     public void start(Stage mainStage) {
         this.mainStage = mainStage;
         this.mainStage.setTitle("Posh Paws Appointment Scheduler");
-        this.mainStage.getIcons().add(new Image("file:resources/images/icon.png"));
+        this.mainStage.getIcons().add(new Image("/images/icon.png"));
 
-        //order is important
         BarberCache.flush();
         PetCache.flush();
         CustomerCache.flush();

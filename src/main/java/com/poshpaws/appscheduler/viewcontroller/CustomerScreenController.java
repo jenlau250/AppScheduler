@@ -549,7 +549,7 @@ public class CustomerScreenController {
         Pet newPet = new Pet(petName, petType, desc);
 
         if (DBHandler.addNewCustomer(newCustomer, newPet)) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Adding customer succeeded");
             alert.setHeaderText("New customer and pet has been added.");
             alert.showAndWait();
@@ -577,7 +577,7 @@ public class CustomerScreenController {
         Customer updateCustomer = new Customer(id, name, phone, email, active, notes);
 
         if (DBHandler.updateCustomer(updateCustomer)) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Update Succeeded");
             alert.setHeaderText("Customer has been updated.");
             alert.showAndWait();
@@ -601,7 +601,7 @@ public class CustomerScreenController {
         Pet newPet = new Pet(id, name, type, desc, cusId);
 
         if (DBHandler.addNewPet(newPet)) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Adding new pet succeeded");
             alert.setHeaderText("Pet has been added.");
             alert.showAndWait();
@@ -627,7 +627,7 @@ public class CustomerScreenController {
         Pet updatePet = new Pet(id, name, type, desc);
 
         if (DBHandler.updatePet(updatePet)) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Update Succeeded");
             alert.setHeaderText("Pet has been updated.");
             alert.showAndWait();
@@ -746,7 +746,7 @@ public class CustomerScreenController {
 
     private void deleteCustomer(Customer customer) {
         if (DBHandler.deleteCustomer(customer)) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Deleted customer succeeded");
             alert.setHeaderText("Customer has been deleted.");
             alert.showAndWait();
@@ -762,7 +762,7 @@ public class CustomerScreenController {
     private void deletePet(Pet p) {
 
         if (DBHandler.deletePet(p)) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Deleted pet succeeded");
             alert.setHeaderText("Pet has been deleted.");
             alert.showAndWait();

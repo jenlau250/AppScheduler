@@ -166,21 +166,36 @@ public class Customer {
 //    public String toString() {
 //        return String.valueOf(customerName);
 //    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (o == null || getClass() != o.getClass()) {
+//            return false;
+//        }
+//        Customer that = (Customer) o;
+//        return Objects.equals(customerId.get(), that.customerId.get())
+//                && Objects.equals(customerName.get(), that.customerName.get());
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(customerId.get(), customerName.get());
+//    }
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
+    public boolean equals(Object object) {
+        if (object == null || !getClass().isAssignableFrom(object.getClass())) {
             return false;
+        } else {
+            Customer other = (Customer) object;
+            return Objects.equals(this.getCustomerId(), other.getCustomerId());
         }
-        Customer that = (Customer) o;
-        return Objects.equals(customerId.get(), that.customerId.get())
-                && Objects.equals(customerName.get(), that.customerName.get());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(customerId.get(), customerName.get());
     }
+
 }

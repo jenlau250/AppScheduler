@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="597.0" prefWidth="400.0" style="-fx-background-color: white;" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poshpaws.appscheduler.viewcontroller.Appointment_AddController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="711.0" prefWidth="400.0" style="-fx-background-color: white;" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.poshpaws.appscheduler.viewcontroller.Appointment_AddController">
    <children>
       <HBox alignment="CENTER" layoutY="1.0" prefHeight="50.0" spacing="15.0" style="-fx-background-color: -fx-lightblue;" stylesheets="@../styles/styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -37,15 +37,9 @@
             </ImageView>
          </children>
       </HBox>
-      <HBox alignment="CENTER" layoutX="19.0" layoutY="540.0" prefHeight="50.0" prefWidth="462.0" spacing="30.0" style="-fx-background-color: lightgray;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <JFXButton fx:id="btnApptSave" onAction="#handleApptSave" prefHeight="30.0" prefWidth="101.0" styleClass="normalButton" text="Save" />
-            <JFXButton fx:id="btnApptCancel" onAction="#handleApptCancel" prefHeight="30.0" prefWidth="109.0" styleClass="normalButton" text="Cancel" />
-         </children>
-      </HBox>
       <VBox alignment="TOP_CENTER" layoutY="50.0" prefHeight="279.0" prefWidth="401.0" spacing="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
          <children>
-            <Label fx:id="apptIdLabel" text="Label" />
+            <Label fx:id="apptIdLabel" text="Label" visible="false" />
             <JFXDatePicker fx:id="datePicker" prefHeight="25.0" prefWidth="250.0" promptText="Date" />
             <AnchorPane>
                <children>
@@ -80,7 +74,7 @@
       </VBox>
       <StackPane layoutY="345.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="345.0">
          <children>
-            <VBox fx:id="vBoxExist" alignment="TOP_CENTER" spacing="5.0">
+            <VBox fx:id="vBoxExist" alignment="TOP_CENTER" spacing="15.0">
                <children>
                   <JFXComboBox fx:id="comboExistCustomer" editable="true" prefHeight="20.0" prefWidth="250.0" promptText="Select Existing Customer">
                      <padding>
@@ -94,10 +88,10 @@
                   </JFXComboBox>
                </children>
                <padding>
-                  <Insets bottom="10.0" left="90.0" right="90.0" top="10.0" />
+                  <Insets bottom="10.0" left="75.0" right="75.0" top="10.0" />
                </padding>
             </VBox>
-            <VBox fx:id="vBoxNew" alignment="TOP_CENTER" spacing="5.0">
+            <VBox fx:id="vBoxNew" alignment="TOP_CENTER" spacing="15.0">
                <children>
                   <JFXTextField fx:id="txtNewCustomer" promptText="New Customer Name" />
                   <JFXTextField fx:id="txtNewNumber" promptText="Phone Number" />
@@ -106,10 +100,20 @@
                   <JFXComboBox fx:id="comboPetType" prefHeight="25.0" prefWidth="277.0" promptText="Select Pet Type" />
                </children>
                <padding>
-                  <Insets bottom="10.0" left="90.0" right="90.0" top="10.0" />
+                  <Insets bottom="10.0" left="75.0" right="75.0" top="10.0" />
                </padding>
             </VBox>
          </children>
       </StackPane>
+      <VBox layoutX="67.0" layoutY="606.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="74.0" prefWidth="250.0" spacing="30.0">
+               <children>
+                  <JFXButton fx:id="btnApptSave" onAction="#handleApptSave" prefHeight="30.0" prefWidth="101.0" styleClass="normalButton" text="Save" />
+                  <JFXButton fx:id="btnApptCancel" onAction="#handleApptCancel" prefHeight="30.0" prefWidth="109.0" styleClass="normalButton" text="Cancel" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

@@ -11,11 +11,8 @@ import com.poshpaws.appscheduler.cache.AppointmentCache;
 import com.poshpaws.appscheduler.dao.DBHandler;
 import com.poshpaws.appscheduler.jCalendar;
 import com.poshpaws.appscheduler.model.Appointment;
-import com.poshpaws.appscheduler.model.Customer;
 import com.poshpaws.appscheduler.util.Loggerutil;
 import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -125,10 +122,11 @@ public class AppointmentListController implements Initializable {
     @FXML
     void handleCustomerView(ActionEvent event) {
 
-        Customer selCustomer = tableView.getSelectionModel().getSelectedItem().getCustomer();
+        Appointment selectedAppt = tableView.getSelectionModel().getSelectedItem();
 
-        if (selCustomer != null) {
-            mainApp.showCustomerPane(selCustomer);
+        if (selectedAppt != null) {
+
+            mainApp.showCustomerPane(selectedAppt.getCustomer());
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Not selected");
@@ -353,14 +351,16 @@ public class AppointmentListController implements Initializable {
 
     private void deleteAppointment(Appointment a) {
 
-        try {
-            PreparedStatement pst = DBHandler.getConn().prepareStatement(
-                    "DELETE FROM appointment WHERE appointmentId = ?");
-            pst.setString(1, a.getAppointmentId());
-            pst.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (DBHandler.deleteAppointment(a)) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Appointment deleted");
+            alert.setHeaderText("Appointment was successfully deleted.");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Appointmet deleting failed");
+            alert.setHeaderText("Please try again.");
+            alert.showAndWait();
         }
 
         AppointmentCache.flush();

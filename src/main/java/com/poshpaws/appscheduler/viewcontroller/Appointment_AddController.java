@@ -20,12 +20,11 @@ import com.poshpaws.appscheduler.model.Appointment;
 import com.poshpaws.appscheduler.model.Barber;
 import com.poshpaws.appscheduler.model.Customer;
 import com.poshpaws.appscheduler.model.Pet;
-import com.poshpaws.appscheduler.util.Util;
 import com.poshpaws.appscheduler.util.Loggerutil;
+import com.poshpaws.appscheduler.util.Util;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -258,31 +257,13 @@ public class Appointment_AddController {
             LocalDateTime ldtStart = LocalDateTime.of(localDate, localStart);
             LocalDateTime ldtEnd = LocalDateTime.of(localDate, localEnd);
 
-            //Convert datetime for database ex: 2020-02-11T22:00Z[UTC]
-            ZoneId zid = ZoneId.systemDefault();
-            ZonedDateTime startUTC = ldtStart.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));
-            ZonedDateTime endUTC = ldtEnd.atZone(zid).withZoneSameInstant(ZoneId.of("UTC"));
-
-            Timestamp startsql = Timestamp.valueOf(startUTC.toLocalDateTime());
-            Timestamp endsql = Timestamp.valueOf(endUTC.toLocalDateTime());
-
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String stringStart = dateFormatter.format(startsql);
-            String stringEnd = dateFormatter.format(endsql);
-
             Barber b = comboBarber.getSelectionModel().getSelectedItem();
-
-            //Exclude existing appointment from list to check against
-            //so you are not comparing the same appointment
-            //however if it's a new appointment, it won't be on the list.
-            //instead of this: Appointment apptToValidate = new Appointment(ldtStart, ldtEnd, b);
-            Appointment check = new Appointment();
+            Appointment check;
             if (editClicked) {
                 check = selectedAppt;
+                //TEST IF VALIDATE CHECK WORKS FOR UPDATING APPTS
             } else {
-                check.setBarber(b);
-                check.setStart(ldtStart);
-                check.setEnd(ldtEnd);
+                check = new Appointment(ldtStart, ldtEnd, b);
             }
 
             if (cache.checkAppointmentOverlap(check)) {
@@ -295,14 +276,12 @@ public class Appointment_AddController {
             } else {
 
                 if (editClicked) {
-                    updateAppointment(stringStart, stringEnd);
+                    updateAppointment();
                 } else {
-                    saveNewAppointment(stringStart, stringEnd);
+                    saveNewAppointment();
                 }
 
-                //Return to list
                 mainApp.refreshView();
-
                 mainApp.showAppointmentListScreen();
             }
 
@@ -319,266 +298,68 @@ public class Appointment_AddController {
 
     }
 
-    private void updateAppointment(String stringStart, String stringEnd) {
+    private Appointment getAppointmentFromFields() {
+
+        Appointment appt = new Appointment();
+        String id = apptIdLabel.getText();
+        String desc = txtDesc.getText(); //notes
+        String type = comboType.getValue();
+        Barber b = comboBarber.getSelectionModel().getSelectedItem();
+
+        //Get Start and End LocalDateTimes
+        LocalDate localDate = datePicker.getValue();
+        String startTime = comboStart.getSelectionModel().getSelectedItem();
+        String endTime = comboEnd.getSelectionModel().getSelectedItem();
+
+        //Convert String times to LocalTime
+        LocalTime localStart = Util.parseStringToTimeFormat(startTime);
+        LocalTime localEnd = Util.parseStringToTimeFormat(endTime);
+
+        //Convert to LocalDateTime
+        LocalDateTime ldtStart = LocalDateTime.of(localDate, localStart);
+        LocalDateTime ldtEnd = LocalDateTime.of(localDate, localEnd);
+
+        //Get new or existing customer/pet to update
+        if (choiceNewCustomer.isSelected()) {
+            Customer c = new Customer("1", txtNewCustomer.getText(), txtNewNumber.getText(), "NA");
+            Pet p = new Pet(txtNewPet.getText(), comboPetType.getValue(), txtPetDesc.getText());
+            appt = new Appointment(id, localDate, ldtStart, ldtEnd, desc, type, b, c, p);
+        } else if (!choiceNewCustomer.isSelected()) {
+
+            Customer c = comboExistCustomer.getSelectionModel().getSelectedItem();
+            Pet p = comboPet.getSelectionModel().getSelectedItem();
+            appt = new Appointment(id, localDate, ldtStart, ldtEnd, desc, type, b, c, p);
+        }
+
+        System.out.println("getAppointmentFromFields is " + appt);
+        return appt;
+    }
+
+    private void updateAppointment() {
         System.out.println("Attempting to update appointment..");
-
-        //common fields to get
-        String sDesc = txtDesc.getText(); //notes
-        String sType = comboType.getValue();
-        String sBarber = comboBarber.getValue().getBarberId();
-        String existCustomerId = comboExistCustomer.getValue().getCustomerId();
-        String existPetId = comboPet.getValue().getPetId();
-        int newCustomerId = -1;
-        int newPetId = -1;
-
-        System.out.println("New toggle is selected " + choiceNewCustomer.isSelected());
 
         if (choiceNewCustomer.isSelected()) {
             if (validateNewCustomerFields()) {
-                try {
+                DBHandler.updateAppointmentNewCustomer(getAppointmentFromFields());
 
-                    //INSERT NEW CUSTOMER RECORD
-                    PreparedStatement ps = DBHandler.getConn().prepareStatement("INSERT INTO customer "
-                            + "( customerName, customerPhone, createDate, createdBy, lastUpdate, lastUpdateBy) "
-                            + " VALUES ( ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)", Statement.RETURN_GENERATED_KEYS);
-                    ps.setString(1, txtNewCustomer.getText());
-                    ps.setString(2, txtNewNumber.getText());
-                    ps.setString(3, savedUser);
-                    ps.setString(4, savedUser);
-
-                    ps.executeUpdate();
-                    ResultSet rs = ps.getGeneratedKeys();
-
-                    if (rs.next()) {
-                        newCustomerId = rs.getInt(1);
-                    }
-
-                    //INSERT NEW PET RECORD
-                    PreparedStatement ps2 = DBHandler.getConn().prepareStatement("INSERT INTO pet "
-                            + "(petName, petType, petDescription, createDate, createdBy, lastUpdate, lastUpdateBy, customerId) "
-                            + " VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-                    ps2.setString(1, txtNewPet.getText());
-                    ps2.setString(2, comboPetType.getValue());
-                    ps2.setString(3, txtPetDesc.getText());
-                    ps2.setString(4, savedUser);
-                    ps2.setString(5, savedUser);
-                    ps2.setInt(6, newCustomerId);
-
-                    ps2.executeUpdate();
-                    ResultSet rs2 = ps2.getGeneratedKeys();
-
-                    if (rs2.next()) {
-                        newPetId = rs2.getInt(1);
-                    }
-
-                    //UPDATE NEW APPT WITH NEW CUSTOMER/PET
-                    PreparedStatement pst = DBHandler.getConn().prepareStatement("UPDATE appointment "
-                            + "SET customerId = ?, barberId = ?, petId = ?, start= ?, end = ?, description = ?, type = ?, lastUpdate= CURRENT_TIMESTAMP, lastUpdateBy = ? "
-                            + "WHERE appointmentId = ? ");
-
-                    pst.setInt(1, newCustomerId);
-                    pst.setString(2, sBarber);
-                    pst.setInt(3, newPetId);
-
-                    pst.setString(4, stringStart);
-                    pst.setString(5, stringEnd);
-
-                    pst.setString(6, sDesc);
-                    pst.setString(7, sType);
-                    pst.setString(8, savedUser);
-                    pst.setString(9, apptIdLabel.getText());
-                    int result = pst.executeUpdate();
-                    if (result == 1) {//one row was affected; namely the one that was inserted!
-                        System.out.println("YAY! Updated Appt");
-
-                    } else {
-                        System.out.println("BOO! didn't update appt");
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-
-                System.out.println("Updating appointment record to save to new customer: "
-                        + " Appointment ID " + apptIdLabel.getText() + " "
-                        + " Desc " + sDesc + " "
-                        + " Type " + sType + " "
-                        + " Barber " + sBarber + " " + comboBarber.getValue().nameProperty().get()
-                        + " New Customer " + newCustomerId + " - " + txtNewCustomer.getText()
-                        + " New Pet " + newPetId + " - " + txtNewPet.getText());
             }
         } else if (!choiceNewCustomer.isSelected()) {
             //update appt for existing pet/customer
-            try {
-
-                PreparedStatement ps4 = DBHandler.getConn().prepareStatement("UPDATE appointment "
-                        + "SET customerId = ?, barberId = ?, petId = ?, start= ?, end = ?, description = ?, type = ?, lastUpdate= CURRENT_TIMESTAMP, lastUpdateBy = ? "
-                        + "WHERE appointmentId = ?");
-
-                ps4.setString(1, comboExistCustomer.getValue().getCustomerId());
-                ps4.setString(2, sBarber);
-                ps4.setString(3, comboPet.getValue().getPetId());
-
-                ps4.setString(4, stringStart);
-                ps4.setString(5, stringEnd);
-
-                ps4.setString(6, sDesc);
-                ps4.setString(7, sType);
-                ps4.setString(8, savedUser);
-                ps4.setString(9, apptIdLabel.getText());
-//            pst.setString(9, currentUser.getUserName());
-                int result = ps4.executeUpdate();
-                if (result == 1) {//one row was affected; namely the one that was inserted!
-                    System.out.println("YAY! Updated Appt");
-
-                } else {
-                    System.out.println("BOO! didn't update appt");
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-
-            System.out.println("Updating appointment record to save to existing customer: "
-                    + " Appointment ID " + apptIdLabel.getText() + " "
-                    + " Desc " + sDesc + " "
-                    + " Type " + sType + " "
-                    + " Barber " + sBarber + " " + comboBarber.getValue().nameProperty().get()
-                    + " Existing Customer " + existCustomerId + " - " + comboExistCustomer.getValue().customerNameProperty().get()
-                    + " Existing Pet " + existPetId + " - " + comboPet.getValue().nameProperty().get()
-            );
+            DBHandler.updateAppointmentExistCustomer(getAppointmentFromFields());
 
         }
-        mainApp.refreshView();
 
-        //        String sContact = currentUser.getUserName(); //CHANGE LATER
     }
 
-    private void saveNewAppointment(String stringStart, String stringEnd) {
+    private void saveNewAppointment() {
 
-        String sType = comboType.getValue();
-        String sBarber = comboBarber.getValue().getBarberId();
-        String sDesc = txtDesc.getText();
-        String existCustomerId = comboExistCustomer.getValue().getCustomerId();
-        String existPetId = comboPet.getValue().getPetId();
-        int newCustomerId = -1;
-        int newPetId = -1;
-
-//        String sContact = currentUser.getUserName(); //CHANGE LATER
         if (choiceNewCustomer.isSelected()) {
+            DBHandler.addAppointmentNewCustomer(getAppointmentFromFields());
 
-            try {
-
-                //INSERT NEW CUSTOMER RECORD
-                PreparedStatement ps = DBHandler.getConn().prepareStatement("INSERT INTO customer "
-                        + "( customerName, customerPhone, createDate, createdBy, lastUpdate, lastUpdateBy) "
-                        + " VALUES ( ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)", Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, txtNewCustomer.getText());
-                ps.setString(2, txtNewNumber.getText());
-                ps.setString(3, savedUser);
-                ps.setString(4, savedUser);
-
-                ps.executeUpdate();
-                ResultSet rs = ps.getGeneratedKeys();
-
-                if (rs.next()) {
-                    newCustomerId = rs.getInt(1);
-                }
-
-                //INSERT NEW PET RECORD
-                PreparedStatement ps2 = DBHandler.getConn().prepareStatement("INSERT INTO pet "
-                        + "(petName, petType, petDescription, createDate, createdBy, lastUpdate, lastUpdateBy, customerId) "
-                        + " VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-                ps2.setString(1, txtNewPet.getText());
-                ps2.setString(2, comboPetType.getValue());
-                ps2.setString(3, txtPetDesc.getText());
-                ps2.setString(4, savedUser);
-                ps2.setString(5, savedUser);
-                ps2.setInt(6, newCustomerId);
-
-                ps2.executeUpdate();
-                ResultSet rs2 = ps2.getGeneratedKeys();
-
-                if (rs2.next()) {
-                    newPetId = rs2.getInt(1);
-                }
-
-                //INSERT NEW APPT WITH NEW CUSTOMER/PET
-                PreparedStatement pst = DBHandler.getConn().prepareStatement("INSERT INTO appointment "
-                        + "(customerId, barberId, petId, start, end, description, type, createDate, createdBy, lastUpdate, lastUpdateBy)"
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)");
-
-                pst.setInt(1, newCustomerId);
-                pst.setString(2, sBarber);
-                pst.setInt(3, newPetId);
-
-                pst.setString(4, stringStart);
-                pst.setString(5, stringEnd);
-
-                pst.setString(6, sDesc);
-                pst.setString(7, sType);
-                pst.setString(8, savedUser);
-                pst.setString(9, savedUser);
-
-                int result = pst.executeUpdate();
-                if (result == 1) {//one row was affected; namely the one that was inserted!
-                    System.out.println("YAY! New Appointment Save");
-
-                } else {
-                    System.out.println("BOO! New Appointment Save");
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-
-            System.out.println("Printing  new appointment for existing customer: "
-                    //                + " Title " + sTitle + " "
-                    + " Desc " + sDesc + " "
-                    + " Type " + sType + " "
-                    + " Barber " + sBarber + " " + comboBarber.getValue().nameProperty().get()
-                    + " Customer " + existCustomerId + " " + comboExistCustomer.getValue().customerNameProperty().get()
-                    + " Pet " + existPetId + " " + comboPet.getValue().nameProperty().get()
-            );
         } else if (!choiceNewCustomer.isSelected()) {
-            //INSERT NEW APPT WITH NEW CUSTOMER/PET
-            try {
-                PreparedStatement pst = DBHandler.getConn().prepareStatement("INSERT INTO appointment "
-                        + "(customerId, barberId, petId, start, end, description, type, createDate, createdBy, lastUpdate, lastUpdateBy)"
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)");
-
-                pst.setString(1, existCustomerId);
-                pst.setString(2, sBarber);
-                pst.setString(3, existPetId);
-
-                pst.setString(4, stringStart);
-                pst.setString(5, stringEnd);
-
-                pst.setString(6, sDesc);
-                pst.setString(7, sType);
-                pst.setString(8, savedUser);
-                pst.setString(9, savedUser);
-
-                int result = pst.executeUpdate();
-                if (result == 1) {//one row was affected; namely the one that was inserted!
-                    System.out.println("YAY! New Appointment Save");
-
-                } else {
-                    System.out.println("BOO! New Appointment Save");
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-
-            System.out.println("Printing  new appointment for new customer: "
-                    //                + " Title " + sTitle + " "
-                    + " Desc " + sDesc + " "
-                    + " Type " + sType + " "
-                    + " Barber " + sBarber + " " + comboBarber.getValue().nameProperty().get()
-                    + " Customer " + newCustomerId + " " + txtNewCustomer.getText()
-                    + " Pet " + newPetId + " " + txtNewPet.getText()
-            );
-
+            //INSERT NEW APPT FOR EXISTING CUSTOMER/PET
+            DBHandler.addAppointmentExistCustomer(getAppointmentFromFields());
         }
-
-        mainApp.refreshView();
     }
 
     private boolean validateAppt() {
@@ -638,14 +419,6 @@ public class Appointment_AddController {
             alert.setContentText(errorMessage);
 
             alert.showAndWait();
-            System.out.println("Validating "
-                    //                    + "Title: " + name + "\n"
-                    + "Appointment TIme: " + date + " from " + start + " to " + end + "\n"
-                    + "Type: " + type + "\n"
-                    + "Barber: " + barber.getBarberName() + "\n"
-                    + "Pet: " + pet.getPetName() + "\n"
-                    + "Customer: " + customer.getCustomerName() + "\n"
-            );
 
             return false;
         }

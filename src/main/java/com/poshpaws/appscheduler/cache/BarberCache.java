@@ -5,7 +5,7 @@
  */
 package com.poshpaws.appscheduler.cache;
 
-import com.poshpaws.appscheduler.dao.BarberDaoImpl;
+import com.poshpaws.appscheduler.dao.DBLoader;
 import com.poshpaws.appscheduler.model.Barber;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,7 +57,7 @@ public class BarberCache {
 
     public static void flush() {
         barberList.clear();
-        barberList.addAll(new BarberDaoImpl().loadBarberData());
+        barberList.addAll(new DBLoader().loadBarberData());
     }
 
 }

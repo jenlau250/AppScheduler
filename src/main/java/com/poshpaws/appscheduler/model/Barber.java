@@ -139,21 +139,18 @@ public class Barber {
     }
 
     @Override
-    public boolean equals(Object o) {
-        // self check
-        if (this == o) {
-            return true;
-        } else // null check
-        if (o == null) {
-            return false;
-        } else // type check and cast
-        if (getClass() != o.getClass()) {
+    public boolean equals(Object object) {
+        if (object == null || !getClass().isAssignableFrom(object.getClass())) {
             return false;
         } else {
-            final Barber a = (Barber) o;
-            // field comparison
-            return Objects.equals(a, a);
+            Barber other = (Barber) object;
+            return Objects.equals(this.barberId, other.barberId);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(barberId.get(), barberName.get());
     }
 
 }

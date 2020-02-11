@@ -5,7 +5,7 @@
  */
 package com.poshpaws.appscheduler.cache;
 
-import com.poshpaws.appscheduler.dao.PetDaoImpl;
+import com.poshpaws.appscheduler.dao.DBLoader;
 import com.poshpaws.appscheduler.model.Customer;
 import com.poshpaws.appscheduler.model.Pet;
 import javafx.collections.FXCollections;
@@ -36,7 +36,7 @@ public class PetCache {
 
     public static void flush() {
         petList.clear();
-        petList.addAll(new PetDaoImpl().loadPetData());
+        petList.addAll(new DBLoader().loadPetData());
     }
 
     public static ObservableList<Pet> getSelectedPets(Customer c) {
