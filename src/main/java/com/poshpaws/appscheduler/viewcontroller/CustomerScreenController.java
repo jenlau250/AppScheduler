@@ -9,10 +9,10 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import com.poshpaws.appscheduler.AppScheduler;
 import com.poshpaws.appscheduler.cache.CustomerCache;
 import com.poshpaws.appscheduler.cache.PetCache;
 import com.poshpaws.appscheduler.dao.DBHandler;
-import com.poshpaws.appscheduler.jCalendar;
 import com.poshpaws.appscheduler.model.Customer;
 import com.poshpaws.appscheduler.model.Pet;
 import com.poshpaws.appscheduler.util.Loggerutil;
@@ -52,7 +52,7 @@ import javafx.util.StringConverter;
  */
 public class CustomerScreenController {
 
-    private jCalendar mainApp;
+    private AppScheduler mainApp;
 
     @FXML
     private Label customerLabel;
@@ -60,8 +60,6 @@ public class CustomerScreenController {
     private Label labelCusID;
     @FXML
     private Label petLabel;
-    @FXML
-    private Label selectPetLabel;
     @FXML
     private JFXButton btnCustomerAdd;
     @FXML
@@ -163,7 +161,6 @@ public class CustomerScreenController {
         checkboxActive.setSelected(true);
 
         cbPetSelection.setVisible(false);
-        selectPetLabel.setVisible(false);
 
         CustomerTable.setDisable(true);
 
@@ -217,13 +214,18 @@ public class CustomerScreenController {
     @FXML
     void handleDeletePet(ActionEvent event) {
         Pet p = cbPetSelection.getSelectionModel().getSelectedItem();
-
-        if (p.getPetId().equals("-1") || p.getPetId().equals("")) {
+        System.out.println("size " + cbPetSelection.getItems().size());
+        if (cbPetSelection.getItems().size() <= 2) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Can't delete ");
-            alert.setHeaderText("Please select an existing pet to delete");
-//            alert.setContentText("Please select a customer to delete");
+            alert.setTitle("Can't delete only pet");
+            alert.setHeaderText("Customers must have at least one pet.");
             alert.showAndWait();
+        } //Show error message if there is only one pet
+        else if (p.getPetId().equals("-1") || p.getPetId().equals("")) {
+            Alert alert2 = new Alert(Alert.AlertType.WARNING);
+            alert2.setTitle("Can't delete ");
+            alert2.setHeaderText("Please select an existing pet to delete");
+            alert2.showAndWait();
         } else {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm delete");
@@ -340,7 +342,7 @@ public class CustomerScreenController {
      * @param mainApp
      * @param currentUser
      */
-    public void setMainController(jCalendar mainApp) {
+    public void setMainController(AppScheduler mainApp) {
 
         this.mainApp = mainApp;
 
@@ -480,7 +482,6 @@ public class CustomerScreenController {
         CustomerTable.setDisable(false);
         labelCusID.setText("");
         cbPetSelection.setVisible(true);
-        selectPetLabel.setVisible(true);
         btnCustomerAdd.setDisable(false);
         btnCustomerUpdate.setDisable(false);
         btnCustomerDelete.setDisable(false);

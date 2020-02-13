@@ -16,6 +16,9 @@ and open the template in the editor.
 
 }
 
+
+
+
 p.field-wrapper input {
     float: right;
 }
@@ -30,6 +33,12 @@ p.required-field label::before {
 
 .subtitle {
   -fx-font: 20px Roboto;
+  -fx-text-fill: #7e7e7e;
+}
+
+.subtitle2 {
+  -fx-font: 18px Roboto;
+  -fx-text-fill: black;
 }
 
 .myButton:hover {
@@ -39,6 +48,28 @@ p.required-field label::before {
     -fx-line-spacing: 1px;
     -fx-font-size: 15px;
 }
+
+.btn {
+  /* default for <button>, but useful for <a> */
+  -fx-display: inline-block;
+  -fx-text-align: center;
+  -fx-text-decoration: none;
+
+  /* create a small space when buttons wrap on 2 lines */
+  -fx-margin: 2px 0;
+
+  /* invisible border (will be colored on hover/focus) */
+  -fx-border: solid 1px transparent;
+  -fx-border-radius: 4px;
+
+  /* size comes from text & padding (no width/height) */
+  -fx-padding: 0.5em 1em;
+
+  /* make sure colors have enough contrast! */
+  -fx-text-fill: #ffffff;
+  -fx-background-color: -fx-darkblue;
+}
+
 
 .btn2 {
     -fx-background-color: -fx-lightblue;

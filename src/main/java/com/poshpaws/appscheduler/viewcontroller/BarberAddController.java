@@ -8,8 +8,8 @@ package com.poshpaws.appscheduler.viewcontroller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDatePicker;
+import com.poshpaws.appscheduler.AppScheduler;
 import com.poshpaws.appscheduler.dao.DBHandler;
-import com.poshpaws.appscheduler.jCalendar;
 import com.poshpaws.appscheduler.model.Barber;
 import com.poshpaws.appscheduler.model.User;
 import com.poshpaws.appscheduler.util.Loggerutil;
@@ -36,7 +36,7 @@ import javafx.scene.image.ImageView;
  */
 public class BarberAddController {
 
-    private jCalendar mainApp;
+    private AppScheduler mainApp;
     private User currentUser;
 
     @FXML
@@ -136,7 +136,7 @@ public class BarberAddController {
      * @param mainApp
      * @param currentUser
      */
-    public void setMainController(jCalendar mainApp, User currentUser) {
+    public void setMainController(AppScheduler mainApp, User currentUser) {
 
         this.mainApp = mainApp;
         this.currentUser = currentUser;
@@ -165,11 +165,12 @@ public class BarberAddController {
             topLabel.setText("Edit Barber Details");
             editMode = true;
             showBarberDetails(selected);
-
+            
         } else {
             topLabel.setText("Add New Barber");
             editMode = false;
             clearFields();
+            checkboxActive.setSelected(true);
 
         }
     }

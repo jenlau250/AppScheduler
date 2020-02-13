@@ -11,7 +11,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.poshpaws.appscheduler.cache.PetCache;
 import com.poshpaws.appscheduler.dao.DBHandler;
-import com.poshpaws.appscheduler.jCalendar;
+import com.poshpaws.appscheduler.AppScheduler;
 import com.poshpaws.appscheduler.model.Customer;
 import com.poshpaws.appscheduler.model.Pet;
 import com.poshpaws.appscheduler.util.Loggerutil;
@@ -49,7 +49,7 @@ import javafx.util.StringConverter;
  */
 public class CustomerPaneController implements Initializable {
 
-    private jCalendar mainApp;
+    private AppScheduler mainApp;
 
     @FXML
     private ImageView btnClose;
@@ -101,7 +101,7 @@ public class CustomerPaneController implements Initializable {
      * @param mainApp
      * @param currentUser
      */
-    public void setMainController(jCalendar mainApp) {
+    public void setMainController(AppScheduler mainApp) {
 
         this.mainApp = mainApp;
 

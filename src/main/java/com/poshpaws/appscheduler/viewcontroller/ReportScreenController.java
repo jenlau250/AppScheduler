@@ -10,7 +10,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.poshpaws.appscheduler.cache.AppointmentCache;
 import com.poshpaws.appscheduler.cache.BarberCache;
 import com.poshpaws.appscheduler.dao.DBHandler;
-import com.poshpaws.appscheduler.jCalendar;
+import com.poshpaws.appscheduler.AppScheduler;
 import com.poshpaws.appscheduler.model.Appointment;
 import com.poshpaws.appscheduler.model.Barber;
 import com.poshpaws.appscheduler.model.Pet;
@@ -45,7 +45,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class ReportScreenController {
 
-    private jCalendar mainApp;
+    private AppScheduler mainApp;
 
     @FXML
     private TableView<Appointment> tblSchedule;
@@ -100,7 +100,7 @@ public class ReportScreenController {
      *
      * @param mainApp
      */
-    public void setMainController(jCalendar mainApp) {
+    public void setMainController(AppScheduler mainApp) {
 
         this.mainApp = mainApp;
 

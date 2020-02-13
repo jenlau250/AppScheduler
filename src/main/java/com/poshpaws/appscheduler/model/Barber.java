@@ -35,9 +35,8 @@ public class Barber {
     public Barber(String id, String name, String phone, String email, Boolean active, String notes, LocalDate date) {
         this.barberId.set(id);
         this.barberName.set(name);
-        this.barberPhone.set(name);
-        this.barberEmail.set(name);
-
+        this.barberPhone.set(phone);
+        this.barberEmail.set(email);
         this.active.set(active);
         this.notes.set(notes);
         this.hireDate.set(date);

@@ -229,20 +229,17 @@ public class Appointment {
         return endTimes;
     }
 
-    @Override
-    //public Appointment(String appointmentId, String title, String startDate, LocalDateTime start, LocalDateTime end, String desc, String type, Barber barber, Customer customer, Pet pet) {
-
-    public String toString() {
-        return "ID: " + getAppointmentId() + '\n'
-                + "Start Date: " + getStartDate() + '\n'
-                + "Time: " + getStart() + " to " + getEnd() + '\n'
-                + "Description: " + getDescription() + '\n'
-                + "Type: " + getType() + '\n'
-                + "Barber: " + getBarber().getBarberId() + " - " + getBarber().getBarberName() + '\n'
-                + "Customer: " + getCustomer().getCustomerId() + " - " + getCustomer().getCustomerName() + '\n'
-                + "Pet: " + getPet().getPetId() + " - " + getPet().getPetName() + '\n';
-    }
-
+//    @Override
+//    public String toString() {
+//        return "ID: " + getAppointmentId() + '\n'
+//                + "Start Date: " + getStartDate() + '\n'
+//                + "Time: " + getStart() + " to " + getEnd() + '\n'
+//                + "Description: " + getDescription() + '\n'
+//                + "Type: " + getType() + '\n'
+//                + "Barber: " + getBarber().getBarberId() + " - " + getBarber().getBarberName() + '\n'
+//                + "Customer: " + getCustomer().getCustomerId() + " - " + getCustomer().getCustomerName() + '\n'
+//                + "Pet: " + getPet().getPetId() + " - " + getPet().getPetName() + '\n';
+//    }
     @Override
     public boolean equals(Object object) {
         if (object == null || !getClass().isAssignableFrom(object.getClass())) {

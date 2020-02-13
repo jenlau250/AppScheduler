@@ -5,16 +5,16 @@ package com.poshpaws.appscheduler.viewcontroller;
 // * To change this template file, choose Tools | Templates
 // * and open the template in the editor.
 // */
-//package jCalendar.viewcontroller;
+//package AppScheduler.viewcontroller;
 //
-//import jCalendar.dao.AppointmentDaoImpl;
-//import jCalendar.dao.DBHandler;
-//import jCalendar.jCalendar;
-//import jCalendar.model.Appointment;
-//import jCalendar.model.Customer;
-//import jCalendar.model.User;
-//import jCalendar.utilities.DateTimeUtil;
-//import jCalendar.utilities.Loggerutil;
+//import AppScheduler.dao.AppointmentDaoImpl;
+//import AppScheduler.dao.DBHandler;
+//import AppScheduler.AppScheduler;
+//import AppScheduler.model.Appointment;
+//import AppScheduler.model.Customer;
+//import AppScheduler.model.User;
+//import AppScheduler.utilities.DateTimeUtil;
+//import AppScheduler.utilities.Loggerutil;
 //import java.sql.PreparedStatement;
 //import java.sql.ResultSet;
 //import java.sql.SQLException;
@@ -124,7 +124,7 @@ package com.poshpaws.appscheduler.viewcontroller;
 //    @FXML
 //    private Button btnNewAdd;
 //
-//    private jCalendar mainApp;
+//    private AppScheduler mainApp;
 //    private User currentUser;
 //
 //    private final DateTimeFormatter timeformat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
@@ -290,7 +290,7 @@ package com.poshpaws.appscheduler.viewcontroller;
 //     * @param mainApp
 //     * @param currentUser
 //     */
-//    public void setMainController(jCalendar mainApp) {
+//    public void setMainController(AppScheduler mainApp) {
 //
 //        this.mainApp = mainApp;
 ////        this.currentUser = currentUser;

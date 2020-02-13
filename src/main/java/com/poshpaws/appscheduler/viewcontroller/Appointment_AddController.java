@@ -10,12 +10,12 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import com.poshpaws.appscheduler.AppScheduler;
 import com.poshpaws.appscheduler.cache.AppointmentCache;
 import com.poshpaws.appscheduler.cache.BarberCache;
 import com.poshpaws.appscheduler.cache.CustomerCache;
 import com.poshpaws.appscheduler.cache.PetCache;
 import com.poshpaws.appscheduler.dao.DBHandler;
-import com.poshpaws.appscheduler.jCalendar;
 import com.poshpaws.appscheduler.model.Appointment;
 import com.poshpaws.appscheduler.model.Barber;
 import com.poshpaws.appscheduler.model.Customer;
@@ -53,7 +53,7 @@ import javafx.util.StringConverter;
  */
 public class Appointment_AddController {
 
-    private jCalendar mainApp;
+    private AppScheduler mainApp;
     private String savedUser;
     private Appointment selectedAppt;
     private boolean editClicked;
@@ -133,7 +133,7 @@ public class Appointment_AddController {
      * @param mainApp
      * @param currentUser
      */
-    public void setMainController(jCalendar mainApp) {
+    public void setMainController(AppScheduler mainApp) {
 
         this.mainApp = mainApp;
         editClicked = false;
@@ -260,7 +260,10 @@ public class Appointment_AddController {
             Barber b = comboBarber.getSelectionModel().getSelectedItem();
             Appointment check;
             if (editClicked) {
+
                 check = selectedAppt;
+                check.setStart(ldtStart);
+                check.setEnd(ldtEnd);
                 //TEST IF VALIDATE CHECK WORKS FOR UPDATING APPTS
             } else {
                 check = new Appointment(ldtStart, ldtEnd, b);
@@ -281,11 +284,11 @@ public class Appointment_AddController {
                     saveNewAppointment();
                 }
 
-                mainApp.refreshView();
-                mainApp.showAppointmentListScreen();
             }
 
         }
+        mainApp.refreshView();
+        mainApp.showAppointmentListScreen();
     }
 
     public void setSelectedAppointment(Appointment appt) {

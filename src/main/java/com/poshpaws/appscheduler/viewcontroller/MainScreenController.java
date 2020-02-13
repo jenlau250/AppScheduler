@@ -6,7 +6,7 @@
 package com.poshpaws.appscheduler.viewcontroller;
 
 import com.jfoenix.controls.JFXButton;
-import com.poshpaws.appscheduler.jCalendar;
+import com.poshpaws.appscheduler.AppScheduler;
 import com.poshpaws.appscheduler.model.User;
 import com.poshpaws.appscheduler.util.Loggerutil;
 import java.io.FileNotFoundException;
@@ -24,7 +24,7 @@ import javafx.stage.Stage;
  */
 public class MainScreenController {
 
-    private jCalendar mainApp;
+    private AppScheduler mainApp;
     private User currentUser;
 
     @FXML
@@ -52,7 +52,7 @@ public class MainScreenController {
      * @param mainApp
      * @param currentUser
      */
-    public void setMenu(jCalendar mainApp, User currentUser) throws FileNotFoundException {
+    public void setMenu(AppScheduler mainApp, User currentUser) throws FileNotFoundException {
         this.mainApp = mainApp;
         this.currentUser = currentUser;
 

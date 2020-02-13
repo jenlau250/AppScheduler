@@ -4,7 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.poshpaws.appscheduler.dao.DBHandler;
-import com.poshpaws.appscheduler.jCalendar;
+import com.poshpaws.appscheduler.AppScheduler;
 import com.poshpaws.appscheduler.model.User;
 import com.poshpaws.appscheduler.util.Loggerutil;
 import java.sql.PreparedStatement;
@@ -20,7 +20,7 @@ import javafx.scene.control.Alert;
 
 public class LoginScreenController {
 
-    private jCalendar mainApp;
+    private AppScheduler mainApp;
     private User currentUser;
 
     @FXML
@@ -116,7 +116,7 @@ public class LoginScreenController {
      * @param mainApp
      * @param currentUser
      */
-    public void setMainController(jCalendar mainApp) {
+    public void setMainController(AppScheduler mainApp) {
 
         this.mainApp = mainApp;
 //        this.currentUser = currentUser;

@@ -55,6 +55,7 @@ public class AppointmentCache {
 
     public static Boolean checkAppointmentOverlap(Appointment a) {
         boolean overlap = false;
+        System.out.println("appointment testing " + a);
 
         List<Appointment> appointmentsForBarber = new ArrayList<>();
         appointmentsForBarber = getBarberAppointmentsTest(a.getBarber().getBarberId());
@@ -62,6 +63,7 @@ public class AppointmentCache {
         //This is to exclude the appointment being updated from comparing to itself
         appointmentsForBarber.remove(a);
         for (Appointment other : appointmentsForBarber) {
+            System.out.println("Other appt checking" + other);
             if (a.getStart().isBefore(other.getEnd()) && other.getStart().isBefore(a.getEnd())) {
                 overlap = true;
             }

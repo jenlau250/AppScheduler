@@ -38,7 +38,7 @@ import javafx.stage.Stage;
  *
  * @author jlau2
  */
-public class jCalendar extends Application {
+public class AppScheduler extends Application {
 
     private Stage mainStage;
     @FXML
@@ -94,7 +94,7 @@ public class jCalendar extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(jCalendar.class.getResource("/fxml/MainScreen.fxml"));
+            loader.setLocation(AppScheduler.class.getResource("/fxml/MainScreen.fxml"));
             mainScreen = (BorderPane) loader.load();
 
             // Show the scene containing the root layout.
@@ -116,7 +116,7 @@ public class jCalendar extends Application {
 
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(jCalendar.class.getResource("/fxml/LoginScreen.fxml"));
+            loader.setLocation(AppScheduler.class.getResource("/fxml/LoginScreen.fxml"));
             login = (AnchorPane) loader.load();
 
             LoginScreenController controller = loader.getController();
@@ -137,7 +137,7 @@ public class jCalendar extends Application {
         try {
 
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(jCalendar.class.getResource("/fxml/CustomerScreen.fxml"));
+            loader.setLocation(AppScheduler.class.getResource("/fxml/CustomerScreen.fxml"));
             StackPane root = (StackPane) loader.load();
             root.setMinSize(25, 25);
             root.setPrefSize(25000, 25000);
@@ -159,7 +159,7 @@ public class jCalendar extends Application {
         try {
 
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(jCalendar.class.getResource("/fxml/BarberScreen.fxml"));
+            loader.setLocation(AppScheduler.class.getResource("/fxml/BarberScreen.fxml"));
             screen = (AnchorPane) loader.load();
 
             screen.setMinSize(25, 25);
@@ -181,7 +181,7 @@ public class jCalendar extends Application {
         try {
 
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(jCalendar.class.getResource("/fxml/BarberAdd.fxml"));
+            loader.setLocation(AppScheduler.class.getResource("/fxml/BarberAdd.fxml"));
             screen = (AnchorPane) loader.load();
 
             mainScreen.setLeft(screen);
@@ -200,7 +200,7 @@ public class jCalendar extends Application {
         try {
 
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(jCalendar.class.getResource("/fxml/BarberAdd.fxml"));
+            loader.setLocation(AppScheduler.class.getResource("/fxml/BarberAdd.fxml"));
             screen = (AnchorPane) loader.load();
 
             mainScreen.setLeft(screen);
@@ -218,10 +218,8 @@ public class jCalendar extends Application {
 
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(jCalendar.class.getResource("/fxml/ReportScreen.fxml"));
+            loader.setLocation(AppScheduler.class.getResource("/fxml/ReportScreen.fxml"));
             screen = (AnchorPane) loader.load();
-            screen.setMinSize(25, 25);
-            screen.setPrefSize(25000, 25000);
             mainScreen.setCenter(screen);
             mainScreen.setLeft(null);
             mainScreen.setRight(null);
@@ -238,7 +236,7 @@ public class jCalendar extends Application {
         try {
 
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(jCalendar.class.getResource("/fxml/AppointmentList.fxml"));
+            loader.setLocation(AppScheduler.class.getResource("/fxml/AppointmentList.fxml"));
             screen = (AnchorPane) loader.load();
             screen.setMinSize(25, 25);
             screen.setPrefSize(25000, 25000);
@@ -260,7 +258,7 @@ public class jCalendar extends Application {
         try {
 
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(jCalendar.class.getResource("/fxml/Appointment_Add.fxml"));
+            loader.setLocation(AppScheduler.class.getResource("/fxml/Appointment_Add.fxml"));
             screen = (AnchorPane) loader.load();
 
             mainScreen.setLeft(screen);
@@ -279,7 +277,7 @@ public class jCalendar extends Application {
         try {
 
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(jCalendar.class.getResource("/fxml/Appointment_Add.fxml"));
+            loader.setLocation(AppScheduler.class.getResource("/fxml/Appointment_Add.fxml"));
             screen = (AnchorPane) loader.load();
 
             mainScreen.setLeft(screen);
@@ -297,7 +295,7 @@ public class jCalendar extends Application {
         try {
 
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(jCalendar.class.getResource("/fxml/CustomerPane.fxml"));
+            loader.setLocation(AppScheduler.class.getResource("/fxml/CustomerPane.fxml"));
             screen = (AnchorPane) loader.load();
 
             mainScreen.setRight(screen);

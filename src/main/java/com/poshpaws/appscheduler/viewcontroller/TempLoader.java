@@ -20,7 +20,7 @@ public class TempLoader extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/jCalendar/viewcontroller/MasterPane.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/AppScheduler/viewcontroller/MasterPane.fxml"));
 
         Scene scene = new Scene(root);
         stage.setScene(scene);

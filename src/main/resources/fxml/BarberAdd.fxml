@@ -42,14 +42,14 @@
       </HBox>
       <VBox alignment="TOP_CENTER" layoutY="50.0" spacing="15.0" AnchorPane.bottomAnchor="89.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
          <children>
-            <Label fx:id="labelBarberId" text="Label" />
+            <Label fx:id="labelBarberId" text="Label" visible="false" />
             <JFXTextField fx:id="txtName" promptText="Name" />
             <JFXTextField fx:id="txtPhone" promptText="Phone" />
             <JFXTextField fx:id="txtEmail" promptText="Email" />
             <JFXDatePicker fx:id="datePicker" prefHeight="25.0" prefWidth="405.0" promptText="Date of Hire" />
             <AnchorPane />
             <JFXCheckBox fx:id="checkboxActive" text="Active?" />
-            <JFXTextField fx:id="txtNotes" alignment="TOP_LEFT" prefHeight="54.0" prefWidth="297.0" promptText="Notes (Optional)" />
+            <JFXTextField fx:id="txtNotes" prefHeight="54.0" prefWidth="297.0" promptText="Notes (Optional)" />
          </children>
          <padding>
             <Insets bottom="10.0" left="50.0" right="50.0" top="10.0" />

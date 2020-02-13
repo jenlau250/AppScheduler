@@ -8,9 +8,9 @@ package com.poshpaws.appscheduler.viewcontroller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import com.poshpaws.appscheduler.AppScheduler;
 import com.poshpaws.appscheduler.cache.BarberCache;
 import com.poshpaws.appscheduler.dao.DBHandler;
-import com.poshpaws.appscheduler.jCalendar;
 import com.poshpaws.appscheduler.model.Barber;
 import com.poshpaws.appscheduler.model.User;
 import com.poshpaws.appscheduler.util.Loggerutil;
@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -33,7 +34,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
  * FXML Controller class
@@ -42,7 +42,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class BarberScreenController {
 
-    private jCalendar mainApp;
+    private AppScheduler mainApp;
     private User currentUser;
     @FXML
     private TableView<Barber> BarberTable;
@@ -164,7 +164,7 @@ public class BarberScreenController {
      * @param mainApp
      * @param currentUser
      */
-    public void setMainController(jCalendar mainApp) {
+    public void setMainController(AppScheduler mainApp) {
 
         this.mainApp = mainApp;
 
@@ -247,13 +247,30 @@ public class BarberScreenController {
 
         //Load Barber Tableview
         barberLabel.setText("Barber Details");
-        colID.setCellValueFactory(new PropertyValueFactory<>("barberId"));
-        colName.setCellValueFactory(new PropertyValueFactory<>("barberName"));
-        colPhone.setCellValueFactory(new PropertyValueFactory<>("barberPhone"));
-        colEmail.setCellValueFactory(new PropertyValueFactory<>("barberEmail"));
-        colStatus.setCellValueFactory(new PropertyValueFactory<>("active"));
-        colNotes.setCellValueFactory(new PropertyValueFactory<>("notes"));
-        colHireDate.setCellValueFactory(new PropertyValueFactory<>("hireDate"));
+//        colID.setCellValueFactory(new PropertyValueFactory<>("barberId"));
+//        colName.setCellValueFactory(new PropertyValueFactory<>("barberName"));
+//        colPhone.setCellValueFactory(new PropertyValueFactory<>("barberPhone"));
+//        colEmail.setCellValueFactory(new PropertyValueFactory<>("barberEmail"));
+//        colStatus.setCellValueFactory(new PropertyValueFactory<>("active"));
+//        colNotes.setCellValueFactory(new PropertyValueFactory<>("notes"));
+//        colHireDate.setCellValueFactory(new PropertyValueFactory<>("hireDate"));
+        colID.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().getBarberId()));
+
+        colName.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().nameProperty().get()));
+
+        colPhone.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().barberPhoneProperty().get()));
+
+        colEmail.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().barberEmailProperty().get()));
+        colStatus.setCellValueFactory(cellData -> cellData.getValue().activeProperty());
+//        colStatus.setCellValueFactory(cellData
+//                -> new SimpleStringProperty(cellData.getValue().activeProperty()));
+        colNotes.setCellValueFactory(cellData
+                -> new SimpleStringProperty(cellData.getValue().noteProperty().get()));
+        colHireDate.setCellValueFactory(cellData -> cellData.getValue().hireDateProperty());
 
     }
 

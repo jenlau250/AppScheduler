@@ -9,7 +9,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.poshpaws.appscheduler.cache.AppointmentCache;
 import com.poshpaws.appscheduler.dao.DBHandler;
-import com.poshpaws.appscheduler.jCalendar;
+import com.poshpaws.appscheduler.AppScheduler;
 import com.poshpaws.appscheduler.model.Appointment;
 import com.poshpaws.appscheduler.util.Loggerutil;
 import java.net.URL;
@@ -42,7 +42,7 @@ import javafx.scene.control.TableView;
  */
 public class AppointmentListController implements Initializable {
 
-    private jCalendar mainApp;
+    private AppScheduler mainApp;
     private LocalDate currDate;
 
     @FXML
@@ -167,7 +167,7 @@ public class AppointmentListController implements Initializable {
      *
      * @param mainApp
      */
-    public void setMainController(jCalendar mainApp) {
+    public void setMainController(AppScheduler mainApp) {
 
         this.mainApp = mainApp;
         appointmentList.addAll(AppointmentCache.getAllAppointments());

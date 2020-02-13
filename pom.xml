@@ -35,7 +35,7 @@
                 <configuration>
 
                     <appName>mavenproject1</appName>
-                    <mainClass>com.poshpaws.appscheduler.jCalendar</mainClass>
+                    <mainClass>com.poshpaws.appscheduler.AppScheduler</mainClass>
 
                     <!-- only required if signing the jar file -->
                     <keyStoreAlias>example-user</keyStoreAlias>
@@ -74,11 +74,7 @@
         </dependency>
     
     <!-- https://mvnrepository.com/artifact/org.controlsfx/controlsfx -->
-<dependency>
-    <groupId>org.controlsfx</groupId>
-    <artifactId>controlsfx</artifactId>
-    <version>8.20.8</version>
-</dependency>
+
 
         <!-- Apache Commons -->
 
@@ -114,27 +110,6 @@
 
         <!-- Testing  -->
 
-<dependency>
-    <groupId>info.solidsoft.mockito</groupId>
-    <artifactId>mockito-java8</artifactId>
-    <version>2.5.0</version>
-    <scope>test</scope>
-</dependency>
-
-<dependency>
-    <groupId>org.assertj</groupId>
-    <artifactId>assertj-core</artifactId>
-    <version>3.13.2</version>
-    <scope>test</scope>
-</dependency>
-
-<dependency>
-    <groupId>org.testfx</groupId>
-    <artifactId>testfx-core</artifactId>
-    <version>4.0.16-alpha</version>
-    <scope>test</scope>
-</dependency>
-
 <!-- https://mvnrepository.com/artifact/junit/junit -->
 <dependency>
     <groupId>junit</groupId>
@@ -143,12 +118,6 @@
     <scope>test</scope>
 </dependency>
 
-<dependency>
-  <groupId>org.dbunit</groupId>
-  <artifactId>dbunit</artifactId>
-  <version>2.6.0</version>
-  <scope>test</scope>
-</dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
